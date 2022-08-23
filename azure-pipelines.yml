@@ -6,6 +6,9 @@
 trigger:
 - main
 
+variables:
+  - group: c64
+
 pool:
   name: Pi4
 
