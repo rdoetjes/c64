@@ -35,13 +35,13 @@ jobs:
         artifactName: c64
         artifactType: 'pipeline' 
 
-  # - job:
-  #   displayName: "Deploy"
-  #   dependsOn: CI
-  #     script: |
-  #       for d in */; do
-  #         prg=$(echo "$d"|sed -s 's/\///g')
-  #         echo "$prg"
-  #         lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/$d/build;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
-  #       done
-  #     displayName: "Upload all PRGs to Ultimate II"
+- job: CD
+  dependsOn: CI
+  steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        source: 'current' 
+        path: '$(Pipeline.Workspace)' 
+
+    - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/c64;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
+      displayName: "Upload all PRGs to Ultimate II"
