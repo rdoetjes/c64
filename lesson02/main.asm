@@ -4,7 +4,13 @@
 BasicUpstart2(main)
 
 main:
-  inc BGCOLOR
-  inc BRCOLOR
+
+//BASIC
+//10 poke 53280,peek(53280)-1
+//20 poke 53281,peek(53281)-1
+//30 goto 10
+
+  dec BGCOLOR
+  dec BRCOLOR
   jmp main
   rts
