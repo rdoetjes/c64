@@ -72,7 +72,9 @@ stages:
         inputs:
           source: 'current' 
           path: '$(Pipeline.Workspace)' 
+
       #Run lftp to mput the *.prg files from the artefact into the directory /Usb0/Dev
       #So after this stage has ran, you should have all your prg files in the directory /Usb0/dev where you can mount or DMA them with the UltimateII cardridge
+      #We are using this instead of the FtpUpload task, because that sends a command that the Ultimate II doesn't recognize
       - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/c64;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
         displayName: "Upload all PRGs to Ultimate II"
