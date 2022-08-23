@@ -12,31 +12,36 @@ variables:
 pool:
   name: Pi4
 
-steps:
-- script: | 
-    echo "create artefact dir"
-    mkdir $(Pipeline.Workspace)/s/c64
-    for d in */; do
-      prg=$(echo "$d"|sed -s 's/\///g')
+jobs:
+  - job CI:
+    steps:
+    - script: | 
+        echo "create artefact dir"
+        mkdir $(Pipeline.Workspace)/s/c64
+        for d in */; do
+          prg=$(echo "$d"|sed -s 's/\///g')
 
-      echo "Building $prg"
-      java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
-      
-      echo "Copying $prg"
-      cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
-    done
-  displayName: 'Assemble Code'
+          echo "Building $prg"
+          java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
+          
+          echo "Copying $prg"
+          cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
+        done
+      displayName: 'Assemble Code'
 
-- task: PublishPipelineArtifact@1
-  inputs:
-    path: '$(Pipeline.Workspace)/s/c64'
-    artifactName: c64
-    artifactType: 'pipeline' 
-    
-- script: |
-    for d in */; do
-      prg=$(echo "$d"|sed -s 's/\///g')
-      echo "$prg"
-      lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/$d/build;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
-    done
-  displayName: "Upload all PRGs to Ultimate II"
+    - task: PublishPipelineArtifact@1
+      inputs:
+        path: '$(Pipeline.Workspace)/s/c64'
+        artifactName: c64
+        artifactType: 'pipeline' 
+
+  # - job:
+  #   displayName: "Deploy"
+  #   dependsOn: CI
+  #     script: |
+  #       for d in */; do
+  #         prg=$(echo "$d"|sed -s 's/\///g')
+  #         echo "$prg"
+  #         lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/$d/build;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
+  #       done
+  #     displayName: "Upload all PRGs to Ultimate II"
