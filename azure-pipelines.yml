@@ -10,8 +10,8 @@ pool:
   name: Pi4
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: java /usr/local/bin/KickAss $(Pipeline.Workspace)/s/lesson01/main.asm -odir $(Pipeline.Workspace)/s/lesson01/build
+  displayName: 'Asssemble Code'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
