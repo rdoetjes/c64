@@ -17,7 +17,7 @@ steps:
     for d in */; do
       prg=$(echo "$d"|sed -s 's/\///g')
       echo "$prg"
-      java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/$d/main.asm -odir $(Pipeline.Workspace)/$d/build -o $prg.prg
+      java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $prg.prg
     done
   displayName: 'Asssemble Code'
 
