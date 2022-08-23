@@ -20,52 +20,58 @@ variables:
 pool:
   name: Pi4     #the private pool running on Pi4 (any linux private pool on the same network as UltimateII cardridge will work)
 
-jobs:
-- job: CI
-  steps:
-    #Run a clean checkout 
-    - checkout: self
-      clean: true
+stages:
+  - stage: CI
+    jobs:
+    - job: BUILD
+      displayName: BUILD
 
-    # Assemble all the files in the directories that have the name main.asm
-    # The actual prg file bears the name of the directory. F.i. lesson01/main.asm will be called lesson01.prg
-    - script: | 
-        set -e
-        echo "create artefact dir"
-        mkdir $(Pipeline.Workspace)/s/c64
+      steps:
+      #Run a clean checkout 
+      - checkout: self
+        clean: true
 
-        for d in */; do
-          prg=$(echo "$d"|sed -s 's/\///g')
+      # Assemble all the files in the directories that have the name main.asm
+      # The actual prg file bears the name of the directory. F.i. lesson01/main.asm will be called lesson01.prg
+      - script: | 
+          set -e
+          echo "create artefact dir"
+          mkdir $(Pipeline.Workspace)/s/c64
 
-          if [ -f $(Pipeline.Workspace)/s/$d/main.asm ]; then
-            echo "Building $prg"
-            java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
-          
-            echo "Copying $prg"
-            cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
-          fi
-        done
-      displayName: 'Assemble Code'
+          for d in */; do
+            prg=$(echo "$d"|sed -s 's/\///g')
 
-    # Make an artefact of all the assembled prg files which were copied in to /c64 in the previous step
-    - task: PublishPipelineArtifact@1
-      inputs:
-        path: '$(Pipeline.Workspace)/s/c64'
-        artifactName: c64
-        artifactType: 'pipeline' 
+            if [ -f $(Pipeline.Workspace)/s/$d/main.asm ]; then
+              echo "Building $prg"
+              java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
+            
+              echo "Copying $prg"
+              cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
+            fi
+          done
+        displayName: 'Assemble Code'
 
-- job: CD
-  dependsOn: CI
-  steps:
-    #We don't need to checkout the code, we have the artefact
-    - checkout: none
+      # Make an artefact of all the assembled prg files which were copied in to /c64 in the previous step
+      - task: PublishPipelineArtifact@1
+        inputs:
+          path: '$(Pipeline.Workspace)/s/c64'
+          artifactName: c64
+          artifactType: 'pipeline' 
 
-    #Download the artefact (we should still have it unless you have more than 1 host in your build pool)
-    - task: DownloadPipelineArtifact@2
-      inputs:
-        source: 'current' 
-        path: '$(Pipeline.Workspace)' 
-    #Run lftp to mput the *.prg files from the artefact into the directory /Usb0/Dev
-    #So after this stage has ran, you should have all your prg files in the directory /Usb0/dev where you can mount or DMA them with the UltimateII cardridge
-    - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/c64;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
-      displayName: "Upload all PRGs to Ultimate II"
+  - stage: CD
+    dependsOn: CI
+    jobs:
+    - job: DEPLOY 
+      steps:
+      #We don't need to checkout the code, we have the artefact
+      - checkout: none
+
+      #Download the artefact (we should still have it unless you have more than 1 host in your build pool)
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          source: 'current' 
+          path: '$(Pipeline.Workspace)' 
+      #Run lftp to mput the *.prg files from the artefact into the directory /Usb0/Dev
+      #So after this stage has ran, you should have all your prg files in the directory /Usb0/dev where you can mount or DMA them with the UltimateII cardridge
+      - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/c64;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
+        displayName: "Upload all PRGs to Ultimate II"
