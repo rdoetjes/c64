@@ -60,6 +60,7 @@ stages:
 
   - stage: CD
     dependsOn: CI
+    condition: succeeded('BUILD')
     jobs:
     - job: DEPLOY 
       steps:
