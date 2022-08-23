@@ -19,7 +19,7 @@ steps:
       echo "$prg"
       java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
     done
-  displayName: 'Asssemble Code'
+  displayName: 'Assemble Code'
 
 - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/lesson01/build;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
   displayName: "Upload to Ultimate II"
