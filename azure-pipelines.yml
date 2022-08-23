@@ -21,7 +21,7 @@ steps:
     done
   displayName: 'Assemble Code'
 
-- script: 
+- script: |
     for d in */; do
       prg=$(echo "$d"|sed -s 's/\///g')
       echo "$prg"
