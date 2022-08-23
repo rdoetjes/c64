@@ -16,16 +16,20 @@ jobs:
 - job: CI
   steps:
     - script: | 
+        set -e
         echo "create artefact dir"
         mkdir $(Pipeline.Workspace)/s/c64
+
         for d in */; do
           prg=$(echo "$d"|sed -s 's/\///g')
 
-          echo "Building $prg"
-          java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
+          if [ -f $(Pipeline.Workspace)/s/$d/main.asm ] ; do
+            echo "Building $prg"
+            java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
           
-          echo "Copying $prg"
-          cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
+            echo "Copying $prg"
+            cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
+          done
         done
       displayName: 'Assemble Code'
 
