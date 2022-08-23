@@ -5,7 +5,7 @@
 # - On build agent host you will need:
 #       -KickAssembler needs to be installed in /usr/local/bin (download the KickAss.zip unzip and upload to /usr/local/bin)
 #       -java installed to run kickassembler jar (sudo apt install default-jre)
-#       -lftp needs to be installed (sudo apty get lftp)
+#       -lftp needs to be installed (sudo apt get lftp) this is because FtpUpload task uses a command that is unrecognized in UltimateII
 # - A variable group called c64 needs to be created containing the following variables:
 #     -variable ftpusername containing the UltimateII user name (usually root)
 #     -variable ftppassword containing the UltimateII user name's password (usually empty)
@@ -76,23 +76,3 @@ stages:
       #So after this stage has ran, you should have all your prg files in the directory /Usb0/dev where you can mount or DMA them with the UltimateII cardridge
       - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/c64;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
         displayName: "Upload all PRGs to Ultimate II"
-        
-      - task: FtpUpload@2
-        inputs:
-          credentialsOption: 'inputs'
-          serverUrl: 'ftp://$(ftphost)'
-          username: $(ftpusername)
-          password: 'anonymous'
-          rootDirectory: '$(Pipeline.Workspace)/c64'
-          filePatterns: '*.prg'
-          remoteDirectory: '/Usb0/dev'
-          clean: false
-          cleanContents: false
-          preservePaths: false
-          trustSSL: false
-          customCmds: |
-            lcd $(Pipeline.Workspace)/c64
-            cd /Usb0
-            cd Dev
-            mput *.prg
-            quit
