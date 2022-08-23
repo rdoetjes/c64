@@ -13,7 +13,7 @@ pool:
   name: Pi4
 
 jobs:
-- job CI:
+- job: CI
   steps:
     - script: | 
         echo "create artefact dir"
