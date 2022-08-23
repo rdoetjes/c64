@@ -13,5 +13,5 @@ steps:
 - script: java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/lesson01/main.asm -odir $(Pipeline.Workspace)/s/lesson01/build
   displayName: 'Asssemble Code'
 
-- script: lftp -u root,"" -e "lcd $(Pipeline.Workspace)/s/lesson01/build;cd /Usb0;cd Dev;put main.prg;quit" 192.168.178.156
+- script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/lesson01/build;cd /Usb0;cd Dev;put main.prg;quit" $(ftphost)
   displayName: "Upload to Ultimate II"
