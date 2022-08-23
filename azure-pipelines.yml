@@ -21,5 +21,10 @@ steps:
     done
   displayName: 'Assemble Code'
 
-- script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/lesson01/build;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
-  displayName: "Upload to Ultimate II"
+- script: 
+    for d in */; do
+      prg=$(echo "$d"|sed -s 's/\///g')
+      echo "$prg"
+      lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/$d/build;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
+    done
+  displayName: "Upload all PRGs to Ultimate II"
