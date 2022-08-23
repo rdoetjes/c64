@@ -13,8 +13,8 @@ pool:
   name: Pi4
 
 jobs:
-  - job CI:
-    steps:
+- job CI:
+  steps:
     - script: | 
         echo "create artefact dir"
         mkdir $(Pipeline.Workspace)/s/c64
