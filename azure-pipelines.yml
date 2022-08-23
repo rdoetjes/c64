@@ -80,8 +80,9 @@ stages:
       - task: FtpUpload@2
         inputs:
           credentialsOption: 'inputs'
-          serverUrl: 'ftp://192.168.178.156'
-          username: 'root'
+          serverUrl: 'ftp://$(ftphost)'
+          username: $(ftpusername)
+          password: $(ftppassword)
           rootDirectory: '$(Pipeline.Workspace)/c64'
           filePatterns: '*.prg'
           remoteDirectory: '/Usb0/dev'
