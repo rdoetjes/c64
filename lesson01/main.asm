@@ -5,7 +5,7 @@
 BasicUpstart2(main)
 
 main:
-  jsr cls         //jump to subroutine cls
+  jsrr cls         //jump to subroutine cls
   //jsr $FF81     //jump to kernal clear screen subroutine
   rts             //return to basic
 
