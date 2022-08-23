@@ -1,0 +1,5 @@
+*.prg
+*.sym
+buildlog.txt
+bin/*
+
