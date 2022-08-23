@@ -1,11 +1,12 @@
 # C64 KickAss build and deploy pipeline
 # Requirements:
 # - Private Build agent, my pool is called Pi4 (change to your pool name)
-# - On build agent
+#     -DevOps agent should be installed in /home/pi/agent
+# - On build agent host you will need:
 #       -KickAssembler needs to be installed in /usr/local/bin (download the KickAss.zip unzip and upload to /usr/local/bin)
 #       -java installed to run kickassembler jar (sudo apt install default-jre)
 #       -lftp needs to be installed (sudo apty get lftp)
-# - A variable group called c64 needs to be created
+# - A variable group called c64 needs to be created containing the following variables:
 #     -variable ftpusername containing the UltimateII user name (usually root)
 #     -variable ftppassword containing the UltimateII user name's password (usually empty)
 #     -variable ftphost containing the UltimateII ip address or hostname
@@ -25,7 +26,7 @@ jobs:
     #Run a clean checkout 
     - checkout: self
       clean: true
-      
+
     # Assemble all the files in the directories that have the name main.asm
     # The actual prg file bears the name of the directory. F.i. lesson01/main.asm will be called lesson01.prg
     - script: | 
