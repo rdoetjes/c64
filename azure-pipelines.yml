@@ -13,6 +13,21 @@ steps:
 - script: java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/lesson01/main.asm -odir $(Pipeline.Workspace)/s/lesson01/build
   displayName: 'Asssemble Code'
 
+- task: FtpUpload@2
+  inputs:
+    #credentialsOption: 'serviceEndpoint' # Options: serviceEndpoint, inputs
+    serverEndpoint: ftp://192.168.178.156/
+    #serverUrl: # Required when credentialsOption == Inputs
+    username: root
+    password: 
+    rootDirectory: $$(Pipeline.Workspace)/s/lesson01/build/
+    filePatterns: '*prg' 
+    remoteDirectory: '/Usb0/dev/' 
+    #clean: false 
+    #cleanContents: false # Required when clean == False
+    #preservePaths: false 
+    #trustSSL: false 
+
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
