@@ -13,7 +13,12 @@ pool:
   name: Pi4
 
 steps:
-- script: java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/lesson01/main.asm -odir $(Pipeline.Workspace)/s/lesson01/build
+- script: | 
+    for d in */; do
+      prg=$(echo "$d"|sed -s 's/\///g')
+      echo "$prg"
+      java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/$d/main.asm -odir $(Pipeline.Workspace)/$d/build -o $prg.prg
+    done
   displayName: 'Asssemble Code'
 
 - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/s/lesson01/build;cd /Usb0;cd Dev;put main.prg;quit" $(ftphost)
