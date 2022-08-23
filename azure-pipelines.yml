@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  pool: Pi4
+  name: Pi4
 
 steps:
 - script: echo Hello, world!
