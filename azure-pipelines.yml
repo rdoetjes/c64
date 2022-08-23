@@ -82,7 +82,7 @@ stages:
           credentialsOption: 'inputs'
           serverUrl: 'ftp://$(ftphost)'
           username: $(ftpusername)
-          password: $(ftppassword)
+          password: ''
           rootDirectory: '$(Pipeline.Workspace)/c64'
           filePatterns: '*.prg'
           remoteDirectory: '/Usb0/dev'
