@@ -23,9 +23,9 @@ jobs:
 - job: CI
   steps:
     #Run a clean checkout 
-    checkout: self
-    clean: true
-
+    - checkout: self
+      clean: true
+      
     # Assemble all the files in the directories that have the name main.asm
     # The actual prg file bears the name of the directory. F.i. lesson01/main.asm will be called lesson01.prg
     - script: | 
