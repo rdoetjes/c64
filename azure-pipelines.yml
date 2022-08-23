@@ -1,20 +1,28 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# C64 KickAss build and deploy pipeline
+# Requirements:
+# - Private Build agent, my pool is called Pi4 (change to your pool name)
+# - On build agent
+#       -KickAssembler needs to be installed in /usr/local/bin (download the KickAss.zip unzip and upload to /usr/local/bin)
+#       -java installed to run kickassembler jar (sudo apt install default-jre)
+#       -lftp needs to be installed (sudo apty get lftp)
+# - A variable group called c64 needs to be created
+#     -variable ftpusername containing the UltimateII user name (usually root)
+#     -variable ftppassword containing the UltimateII user name's password (usually empty)
+#     -variable ftphost containing the UltimateII ip address or hostname
 
 trigger:
 - main
 
 variables:
-  - group: c64
+  - group: c64  #variable group containing the ftp related variables and values
 
 pool:
-  name: Pi4
+  name: Pi4     #the private pool running on Pi4 (any linux private pool on the same network as UltimateII cardridge will work)
 
 jobs:
 - job: CI
   steps:
+    # Assemble all the files in the directories that have the name main.asm
     - script: | 
         set -e
         echo "create artefact dir"
@@ -33,6 +41,7 @@ jobs:
         done
       displayName: 'Assemble Code'
 
+    # Make an artefact of all the assembled prg files which were copied in to /c64 in the previous step
     - task: PublishPipelineArtifact@1
       inputs:
         path: '$(Pipeline.Workspace)/s/c64'
@@ -42,10 +51,12 @@ jobs:
 - job: CD
   dependsOn: CI
   steps:
+    #Download the artefact (we should still have it unless you have more than 1 host in your build pool)
     - task: DownloadPipelineArtifact@2
       inputs:
         source: 'current' 
         path: '$(Pipeline.Workspace)' 
-
+    #Run lftp to mput the *.prg files from the artefact into the directory /Usb0/Dev
+    #So after this stage has ran, you should have all your prg files in the directory /Usb0/dev where you can mount or DMA them with the UltimateII cardridge
     - script: lftp -u "$(ftpusername)","$(ftppassword)" -e "lcd $(Pipeline.Workspace)/c64;cd /Usb0;cd Dev;mput *.prg;quit" $(ftphost)
       displayName: "Upload all PRGs to Ultimate II"
