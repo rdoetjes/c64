@@ -23,13 +23,13 @@ jobs:
         for d in */; do
           prg=$(echo "$d"|sed -s 's/\///g')
 
-          if [ -f $(Pipeline.Workspace)/s/$d/main.asm ] ; do
+          if [ -f $(Pipeline.Workspace)/s/$d/main.asm ]; then
             echo "Building $prg"
             java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
           
             echo "Copying $prg"
             cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
-          done
+          fi
         done
       displayName: 'Assemble Code'
 
