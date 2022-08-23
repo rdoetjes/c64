@@ -22,8 +22,9 @@ pool:
 jobs:
 - job: CI
   steps:
-    #We don't need to checkout the code, we have the artefact
-    - checkout: none
+    #Run a clean checkout 
+    checkout: self
+    clean: true
 
     # Assemble all the files in the directories that have the name main.asm
     # The actual prg file bears the name of the directory. F.i. lesson01/main.asm will be called lesson01.prg
@@ -55,6 +56,9 @@ jobs:
 - job: CD
   dependsOn: CI
   steps:
+    #We don't need to checkout the code, we have the artefact
+    - checkout: none
+
     #Download the artefact (we should still have it unless you have more than 1 host in your build pool)
     - task: DownloadPipelineArtifact@2
       inputs:
