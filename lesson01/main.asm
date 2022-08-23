@@ -11,7 +11,7 @@ main:
 
 cls:
   //A accumulator, X and Y index registers
-  lda #1         //load a with value 32 (space)
+  lda #32         //load a with value 32 (space)
   ldx #0          //load x with value 0 (is our counter)
 
 cls_loop:         //fill screen memory with 1000 spaces
