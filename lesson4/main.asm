@@ -12,7 +12,7 @@ main:
 rts
 
 printHex:
-  jmp !+          //jump over the data in this sub routine
+  jmp !+                    //jump over the data in this sub routine
   // array fro translating values 0-15 to the right hexadecimal character
   printHex_hextable:  .byte '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' 
   // the calculated result is stored (self modifying code, so we can easily use it where and how we want)
