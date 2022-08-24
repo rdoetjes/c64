@@ -3,15 +3,15 @@
 BasicUpstart2(main)
 
 main:
-  lda #16                    //number to turn into hex
-  jsr converToHex                //call the hex conversion (result will be in converToHex_result)
-  lda converToHex_result         //get first hex character
+  lda #16                     //number to turn into hex
+  jsr convertToHex            //call the hex conversion (result will be in converToHex_result)
+  lda converToHex_result      //get first hex character
   sta SCREEN                  //print that hex character on position 0
-  lda converToHex_result + 1     //get the second hex character
+  lda converToHex_result + 1  //get the second hex character
   sta SCREEN + 1              //print that hex character on position 1
 rts
 
-converToHex:
+convertToHex:
   jmp !+                    //jump over the data in this sub routine
   // array fro translating values 0-15 to the right hexadecimal character
   converToHex_hextable:  .byte '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' 
