@@ -22,14 +22,13 @@ convertToHex:
   txa                       //safe the x register on the stack, because we will be changing it's contents 
   pha
   lda $fb                   //get the A value from zero page again
-  pha                       // we need to save a copy of a on the stack, because we will and it and globber it
-  
+
   and #15                   // and the lower nibble, so we know what the lower past of the hex value is
   tax                       //set the result from the and in x
   lda converToHex_hextable, x  //lookup in the converToHex_hextable array the right converToHex_hextable character for index in x register
   sta converToHex_result + 1   //store that in the result + 1 position (lowest of the two converToHex_hextable nibble)
 
-  pla                       // pop the a so we have the actual number again in a
+  lda $fb                   // restor the a so we have the actual number again in a
   and #240                  // and the high nibble
   
   lsr                       //shift that result 4 times to the right, into the lower nibble
