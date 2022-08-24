@@ -39,7 +39,7 @@ convertToHex:
 
   tax                       // transfer that nibble from a into x
   lda converToHex_hextable, x  // get the correct converToHex_hextable chracter for index x
-  sta converToHex_result       //store that converToHex_hextable character into converToHex_result (the highest nibble)
+  sta converToHex_result    //store that converToHex_hextable character into converToHex_result (the highest nibble)
 
   pla                       // restore x
   tax
