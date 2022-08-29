@@ -27,10 +27,10 @@ getMazeChar:
   lda SID_OSC3_RO               //load random voice amplitude value into a                 
   and #$1                       // and a with 1, this will return either 0 or 1 depending whether value in a is even or odd
   beq !+                        //if a and 1 == 0 then a = /
-  lda #47                      //else a = \
+  lda #206                      //else a = \
   jmp !++
 !:
-  lda #77
+  lda #205
 !:
   rts       
 
