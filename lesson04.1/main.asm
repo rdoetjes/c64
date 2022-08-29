@@ -18,6 +18,7 @@ main:
   jsr setupSid4Noise            //setup the voice 3 for noise generation 
 loop:
   jsr printMazeLine
+  jsr shiftUp
   jmp loop                     // loop forever
   rts
 
@@ -26,10 +27,10 @@ getMazeChar:
   lda SID_OSC3_RO               //load random voice amplitude value into a                 
   and #$1                       // and a with 1, this will return either 0 or 1 depending whether value in a is even or odd
   beq !+                        //if a and 1 == 0 then a = /
-  lda #206                      //else a = \
+  lda #47                      //else a = \
   jmp !++
 !:
-  lda #205
+  lda #77
 !:
   rts       
 
@@ -45,7 +46,6 @@ printMazeLine:
 
   ldx #$00
   stx $ff
-  jsr shiftUp
   rts
 
 shiftUp:
