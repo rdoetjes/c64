@@ -7,19 +7,16 @@
 .const SID_VOICE3_CTRL = $d412  //voice 3 control register (to select wave type)
 .const SID_WAV_NOISE = $80      //128 dec, when put in voice3 control register it will select noise wave type
 .const SID_OSC3_RO = $d41b      //this will contain the amplitude value of the noise at moment of reading (because wave is noise it's random)
-.const KERNAL_CHROUT = $ffd2    //print chrout kernal call
-.const BOTTOM_LINE = $07c0
-.const SCREEN = $0400
+.const BOTTOM_LINE = $07c0      //memory position for bottom line's first character 
+.const SCREEN = $0400           //screen base address
 
 BasicUpstart2(main)
 
 main:
-  ldx #$00
-  stx $ff
   jsr setupSid4Noise            //setup the voice 3 for noise generation 
 loop:
-  jsr printMazeLine
-  jsr shiftUp
+  jsr printMazeLine            // print a line of the maze on the bottom line of the screen
+  jsr shiftUp                  // shit the whole screen up one row
   jmp loop                     // loop forever
   rts
 
@@ -33,36 +30,34 @@ getMazeChar:
 !:
   lda #205
 !:
-  rts       
+  rts            
 
+// prints a whole line of the maze on the bottom line on the screen
 printMazeLine:
-  ldx $ff
-
+  ldx #$00                  // set the x to 0 
  newChar:
-  jsr getMazeChar
-  sta BOTTOM_LINE, x
-  inx 
-  cpx #41
+  jsr getMazeChar           // generate a random / or \
+  sta BOTTOM_LINE, x        // print the random \ or / on the bottom line on x position x
+  inx                       // inc x
+  cpx #41                   // is != 41 the getch newChar. As the line is not completely filled yet
   bne newChar
-
-  ldx #$00
-  stx $ff
   rts
 
 shiftUp:
-  ldx #$00
+  ldx #$00                  // set the character counter (X), for the line to 0
 !:
-//unrolled copy of the 25 lines, is this the fastest way?
+
+  //unrolled copy of the 25 lines, is this the fastest way? At least faster than indirect addressing
 .for(var line=1; line<25; line++){
-  lda $0400 + (line * 40), x
-  sta $0400 + (line * 40) - 40 , x
+  lda $0400 + (line * 40), x            //load the character from the source line in A
+  sta $0400 + (line * 40) - 40 , x      //store the character on the same x position in previous line (destination line); effectively moving up
 }
-  inx
-  cpx #$28
-  beq !+
-  jmp !-
+  inx                       // increment the character counter
+  cpx #$28                  // did we copy the 40 chars? Then movie to the next return from subroutine else keep copying
+  beq !+                    // keep copying till all 40 chars of all the lines are copied to the line above
+  jmp !-                    // we copied all 40 chars for all 24 lines to the line above and thus we can return from subroutine
 !:
-  rts 
+  rts                       // return from subroutine
 
 //voice 3 is the only voice with noise generator and we enabled it with highest frequency
 //in order to get fastest random numbers
