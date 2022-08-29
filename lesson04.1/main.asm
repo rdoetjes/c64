@@ -14,12 +14,10 @@
 BasicUpstart2(main)
 
 main:
-  ldx #$00
-  stx $ff
   jsr setupSid4Noise            //setup the voice 3 for noise generation 
 loop:
-  jsr printMazeLine
-  jsr shiftUp
+  jsr printMazeLine            // print a line of the maze on the bottom line of the screen
+  jsr shiftUp                  // shit the whole screen up one row
   jmp loop                     // loop forever
   rts
 
