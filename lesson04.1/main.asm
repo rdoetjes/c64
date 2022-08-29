@@ -7,9 +7,8 @@
 .const SID_VOICE3_CTRL = $d412  //voice 3 control register (to select wave type)
 .const SID_WAV_NOISE = $80      //128 dec, when put in voice3 control register it will select noise wave type
 .const SID_OSC3_RO = $d41b      //this will contain the amplitude value of the noise at moment of reading (because wave is noise it's random)
-.const KERNAL_CHROUT = $ffd2    //print chrout kernal call
-.const BOTTOM_LINE = $07c0
-.const SCREEN = $0400
+.const BOTTOM_LINE = $07c0      //memory position for bottom line's first character 
+.const SCREEN = $0400           //screen base address
 
 BasicUpstart2(main)
 
