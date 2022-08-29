@@ -1,7 +1,7 @@
 
 // 10 PRINT CHR$ (205.5 + RND (1)); : GOTO 10
 // in assmembly
-// SCROLL SCREEN UP WITH UNROLLED COPY CODE
+// SCROLL SCREEN UP USING INDEXED ADRESSING
 
 .const SID_VOICE3_LB = $d40e    //voice 3 lowbyte for requence
 .const SID_VOICE3_CTRL = $d412  //voice 3 control register (to select wave type)
@@ -10,6 +10,7 @@
 .const KERNAL_CHROUT = $ffd2    //print chrout kernal call
 .const BOTTOM_LINE = $07c0
 .const SCREEN = $0400
+.const SCREEN_LINE2 = $0428
 
 BasicUpstart2(main)
 
@@ -50,17 +51,44 @@ printMazeLine:
   rts
 
 shiftUp:
-  ldx #$00
+  lda #<SCREEN
+  sta $fb
+  lda #>SCREEN
+  sta $fc
+
+  lda #<SCREEN_LINE2
+  sta $fd
+  lda #>SCREEN_LINE2
+  sta $fe
+  
+  ldx #24   //nuber of lines to move up
 !:
-//unrolled copy of the 25 lines, is this the fastest way?
-.for(var line=1; line<25; line++){
-  lda $0400 + (line * 40), x
-  sta $0400 + (line * 40) - 40 , x
-}
-  inx
-  cpx #$28
-  beq !+
-  jmp !-
+  ldy #$00  //characters per line. This is the index register
+!:
+  lda ($fd), y
+  sta ($fb), y
+  iny
+  cpy #$28
+  bne !-
+
+  clc
+  lda $fb
+  adc #40
+  sta $fb
+  lda $fc
+  adc #0
+  sta $fc
+
+  clc
+  lda $fd
+  adc #40
+  sta $fd
+  lda $fe
+  adc #0
+  sta $fe
+  dex
+  cpx #00
+  bne !--
 !:
   rts 
 

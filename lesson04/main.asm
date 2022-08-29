@@ -1,6 +1,7 @@
 
 // 10 PRINT CHR$ (205.5 + RND (1)); : GOTO 10
-// in assmebly
+// in assmembly
+// SCROLL SCREEN USING CHROUT KERNAL CALL (SLOW)
 
 .const SID_VOICE3_LB = $d40e    //voice 3 lowbyte for requence
 .const SID_VOICE3_CTRL = $d412  //voice 3 control register (to select wave type)
