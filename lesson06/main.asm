@@ -17,15 +17,15 @@ loop:
   cmp RASTER_LINE
   bne !-
   
-  lda slow
-  cmp #15
+  lda frame_delay
+  cmp #12
   beq !+
-  inc slow
+  inc frame_delay
   jmp loop
 !:
   jsr fillColors
   lda #0
-  sta slow
+  sta frame_delay
   jmp loop
 
 fillScreen:
@@ -65,7 +65,7 @@ getNextColor:
   inc colorOffset
   rts
 
-slow:
+frame_delay:
   .byte $00
 
 colorOffset:
