@@ -1,4 +1,5 @@
 
+
 // 10 PRINT CHR$ (205.5 + RND (1)); : GOTO 10
 // in assmembly
 // SCROLL SCREEN UP USING INDEXED ADRESSING
