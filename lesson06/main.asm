@@ -11,14 +11,14 @@ main:
   sta $d021
   lda #'.'
   jsr fillScreen
-  jsr fillColors
 loop:
   lda #$f0 
+!:
   cmp RASTER_LINE
-  bne *-3
+  bne !-
   
   lda slow
-  cmp #8
+  cmp #15
   beq !+
   inc slow
   jmp loop
