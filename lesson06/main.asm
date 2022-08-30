@@ -9,7 +9,7 @@ main:
   lda #$00
   sta $d020
   sta $d021
-  lda #'.'
+  lda #122
   jsr fillScreen
 loop:
   lda #$f0 
