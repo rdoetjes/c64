@@ -3,7 +3,7 @@
 .const RASTER_LINE = $d012
 
 BasicUpstart2(main)
-*=$4000
+*=$1000
 
 main:
   lda #$00
