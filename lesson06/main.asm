@@ -46,7 +46,7 @@ fillColors:
   sta COLOR_RAM, y
   sta COLOR_RAM + $100, y
   sta COLOR_RAM + $200, y
-  sta COLOR_RAM + $300, y
+  sta COLOR_RAM + $2e8, y
   jsr getNextColor
   dey
   bne !-
