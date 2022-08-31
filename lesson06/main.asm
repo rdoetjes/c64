@@ -30,7 +30,7 @@ loop:
   sta frame_delay
   jmp loop          // and loop forever
 
-// fiilScreen, fills the screen with a character set in A
+// fillScreen, fills the screen with a character set in A
 // will globber X
 fillScreen:
   ldx #$00
@@ -55,7 +55,7 @@ fillColors:
   sta COLOR_RAM + $100, y       // fill the current color at this color ram location offset by $100
   sta COLOR_RAM + $200, y       // fill the current color at this color ram location offset by $200
   sta COLOR_RAM + $2e8, y       // fill the current color at this color ram location offset by $2e8
-  //jsr getNextColor            // calling getNexColor again greates more "lighting like strokes"; experiment with it
+  jsr getNextColor              // calling getNexColor again greates more "zigzag like strokes"; experiment with calling more or less of them
   dey                           // decrement y and if not 00 then continue filling colour ram
   bne !-
   rts                           // return from subroutine
