@@ -1,7 +1,7 @@
 *=$1000
 #import "memorymap.asm"
 
-.var OFFSET = $140
+.const OFFSET = $140
 
 BasicUpstart2(main)
 
