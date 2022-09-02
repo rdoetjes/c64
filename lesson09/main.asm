@@ -18,8 +18,7 @@ everyFrame:
     jmp everyFrame
 
 scrollTextWholeStep:
-    ldx #$0
-    stx hard_scroll
+    dec hard_scroll
     jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
     lda VIC.XSCROLL
     ora #7
@@ -42,8 +41,7 @@ fineScroll:
   beq !+
   jmp !++
 !:
-  ldx #1
-  stx hard_scroll
+  inc hard_scroll           // set flag to do a whole byte hard scroll
 !:
   rts
 
