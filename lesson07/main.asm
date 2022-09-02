@@ -101,16 +101,22 @@ rts
 //Point to Charset in $3000, we use 3000 because we will later set a sid tune on 2000
 pointToRAMCharSet:
   lda VIC.MEMORY_SETUP
-  and #240
-  ora #12
-  sta VIC.MEMORY_SETUP
+  // Table of lower nibble and the corresponding character ram address  
+  // $D018 = %xxxx000x -> charmem is at $0000
+  // $D018 = %xxxx001x -> charmem is at $0800
+  // $D018 = %xxxx010x -> charmem is at $1000
+  // $D018 = %xxxx011x -> charmem is at $1800
+  // $D018 = %xxxx100x -> charmem is at $2000
+  // $D018 = %xxxx101x -> charmem is at $2800
+  // $D018 = %xxxx110x -> charmem is at $3000
+  // $D018 = %xxxx111x -> charmem is at $3800
+  and #240              // keep the upper 4 bits, so that screen RAM points to 0400
+  ora #12               // set lowest 4 bits to 12, moving charset ram to $3000
+  sta VIC.MEMORY_SETUP  // sta the configuration of screen ram and character ram offsets to VIC
 rts
 
 text1:
   .text " are you keeping up with the commodore?!"
-  .byte 00
-
-text_color_delay:
   .byte 00
 
 gradientOffset:
