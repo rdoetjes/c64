@@ -34,14 +34,18 @@ frameWait:
 rts
 
 fineScroll:
-  dec VIC.XSCROLL
-  lda VIC.XSCROLL
-  and #7 // keep last three bits intact
-  cmp #0
+  dec VIC.XSCROLL         // decrement the VIC.XSCROLL which will only effect bits 0,1,2
+  lda VIC.XSCROLL         // load the value from VIC.XSCROLLL
+  and #7                  // keep last three bits intact
+  cmp #0                  // check if it's 0 if inc hard_scroll to signal the event_loop to hard scroll left
   beq !+
   jmp !++
 !:
   inc hard_scroll           // set flag to do a whole byte hard scroll
+  // reset the bottom 3 bits to high again so we can count back without harming the upper bit
+  lda VIC.XSCROLL           
+  ora #7
+  sta VIC.XSCROLL
 !:
   rts
 
