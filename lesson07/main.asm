@@ -6,11 +6,11 @@ BasicUpstart2(main)
 
 main:
   jsr setup                 // setup routine will tell VIC where to find custom charset and clears the screen
-  jsr fillColorOnline     // cycle the colours in the text
+  jsr fillColorOnline       // fill the lines for the text with the repeating color gradient
   eventLoop:
-    jsr text                // write text over and over again, as later on we will make this scroll    
-    jsr colorCycle
-    jsr frameWait           // wait for a frame
+    jsr text                // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
+    jsr colorCycle          // slide the colorgradient to the left
+    jsr frameWait           // wait for rasterline (in essence waiting for the next frame)
     jmp eventLoop
 
 frameWait:
@@ -107,7 +107,7 @@ pointToRAMCharSet:
 rts
 
 text1:
-  .text " are you keeping up with the commodore!"
+  .text " are you keeping up with the commodore?!"
   .byte 00
 
 text_color_delay:
