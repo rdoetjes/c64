@@ -194,7 +194,7 @@ textOffset:
   .byte 00
 
 text1:
-  .text "...are you keeping up with the commodore?! cos the commodore is keeping up with you..."
+  .text "...are you keeping up with the commodore?! cos, the commodore is keeping up with you...are you keeping up? cos, the commodore is keeping up with you!!!..."
   .byte 00
 
 gradientOffset:
