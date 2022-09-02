@@ -15,7 +15,6 @@ loop:
   jmp loop                // if event_hanld is not set loop and read again event_handle
 !:  
   jsr music.play          // play the next part of the music
-
   jsr fineScroll          // fine scroll the screen
   jsr colorCycle          // slide the colorgradient to the left
   
@@ -131,6 +130,7 @@ fillColorOnline:
 clearScreen:
   ldx #250
   lda #32 //blank tile in this map
+  
 !:
   dex
   sta VIC.SCREEN, x
