@@ -8,9 +8,21 @@ main:
   jsr setup                 // setup routine will tell VIC where to find custom charset and clears the screen
   jsr fillColorOnline       // fill the lines for the text with the repeating color gradient
   eventLoop:
-    jsr text                // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
+    ldx text_delay
+    cpx #8
+    beq scrollText
+    jmp colorText
+
+scrollText:
+    ldx #$0
+    stx text_delay
+    jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
+
+colorText:
     jsr colorCycle          // slide the colorgradient to the left
+
     jsr frameWait           // wait for rasterline (in essence waiting for the next frame)
+    inc text_delay
     jmp eventLoop
 
 frameWait:
@@ -21,12 +33,43 @@ frameWait:
 !end:    
 rts
 
+insertCharAtBack:
+  ldx textOffset
+  lda text1, x
+  cmp #$00
+  beq !++
+!:
+  sta VIC.SCREEN + OFFSET + 39
+  adc #127
+  sta VIC.SCREEN + OFFSET + 79
+  inc textOffset
+  jmp !++
+!:
+  ldx #$00
+  stx textOffset
+!:
+  rts
+
+scroller:
+  ldx #1
+!:
+  lda VIC.SCREEN + OFFSET, x
+  sta VIC.SCREEN + OFFSET - 1 , x
+
+  lda VIC.SCREEN + OFFSET + 40 , x
+  sta VIC.SCREEN + OFFSET + 40 - 1 , x
+  inx
+  cpx #40
+  bne !-
+  jsr insertCharAtBack
+  rts
+
 // this will slide the colors on the two lines pointed to by SCREEN + OFFSET to the left and inserts the first color at the back
 // in essence cycling the gradient around
 // clobbers, A, X and Y
 colorCycle:
   ldx VIC.COLOR_RAM + OFFSET
-  ldy #1
+  ldy #0
 !:
   lda VIC.COLOR_RAM + OFFSET + 1, y
   sta VIC.COLOR_RAM + OFFSET + 40 , y
@@ -130,8 +173,14 @@ pointToRAMCharSet:
   sta VIC.MEMORY_SETUP  // sta the configuration of screen ram and character ram offsets to VIC
 rts
 
+text_delay:
+  .byte 00
+
+textOffset:
+  .byte 00
+
 text1:
-  .text " are you keeping up with the commodore?!"
+  .text "...are you keeping up with the commodore?! cos the commodore is keeping up with you..."
   .byte 00
 
 gradientOffset:
