@@ -33,14 +33,6 @@ scrollTextWholeStep:
   dec event_handle        // we are done with this event so dec it back to 0
   jmp loop
 
-frameWait:
-   lda #$ff                 // loop until line 255 is drawn by the VIC
- !raster:
-   cmp VIC.RASTER_LINE      // compare current raster line with #$ff
-   bne !raster-             // current rasterline not #$ff jump to raster, this way we sync drawing with raster line
-!end:    
-rts
-
 fineScroll:
   dec VIC.XSCROLL
   lda VIC.XSCROLL
