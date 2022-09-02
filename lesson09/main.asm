@@ -1,6 +1,7 @@
 #import "memorymap.asm"     //include some of the the constants aka lables for VIC and SID so we don't need to do that manually every time.
 
 .const OFFSET = $190        //offset for where we want to begin writing the string
+.var music = LoadSid("80s_Ad.sid")
 
 BasicUpstart2(main)
 
@@ -9,21 +10,8 @@ main:
   jsr fillColorOnline       // fill the lines for the text with the repeating color gradient
 
 everyFrame:
-    jsr frameWait           // wait for rasterline (in essence waiting for the next frame)
-    jsr fineScroll
-    jsr colorCycle          // slide the colorgradient to the left
-    
-    ldx hard_scroll
-    bne scrollTextWholeStep
-    jmp everyFrame
-
-scrollTextWholeStep:
-    dec hard_scroll
-    jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
-    lda VIC.XSCROLL
-    ora #7
-    sta VIC.XSCROLL
-    jmp everyFrame
+    //jsr frameWait           // wait for rasterline (in essence waiting for the next frame)
+  jmp *
 
 frameWait:
    lda #$ff                 // loop until line 255 is drawn by the VIC
@@ -148,7 +136,53 @@ setup:
   sta VIC.SCREEN_COLOR
 
   jsr clearScreen
+
+  lda #music.startSong-1              //init the SID tune
+  ldx #0
+  ldy #0
+  jsr music.init              //init the SID tune
+  
+  sei
+  lda #<irq1
+  sta $0314
+  lda #>irq1
+  sta $0315
+  asl $d019
+  lda #$7b
+  sta $dc0d
+  lda #$81
+  sta $d01a
+  lda #$1b
+  sta $d011
+  lda #$80
+  sta $d012
+  cli
 rts
+
+irq1:
+  asl $d019
+  jsr music.play 
+
+  jsr fineScroll
+  jsr colorCycle          // slide the colorgradient to the left
+  
+  ldx hard_scroll
+  bne scrollTextWholeStep
+  jmp !+
+
+scrollTextWholeStep:
+  dec hard_scroll
+  jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
+  lda VIC.XSCROLL
+  ora #7
+  sta VIC.XSCROLL
+!:
+  pla
+  tay
+  pla
+  tax
+  pla
+  rti
 
 // Draws the line of text to the screen on localation SCREEN+OFFSET
 // The font we use is an "elongated font", that uses two characters, the top half and the bottom half.
@@ -201,6 +235,8 @@ gradientOffset:
 gradientColor:
   .byte $07, $07, $0f, $0a, $0c, $04, $0b, $06, $06, $04, $0c, $0a, $0f, $0b
 
+*=music.location "Music"
+  .fill music.size, music.getData(i)
 
 *=$3000                     //load charset in $3000
 #import "charset_1.asm"     // load the charset_1.asm into this project, this charset is created using https://petscii.krissz.hu/ editor. Then exported to assembly and made to work with kickassembler
