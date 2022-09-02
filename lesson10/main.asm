@@ -14,10 +14,11 @@ loop:
   bne !+                  // if event handle is not 0 then we had the irq trigger events
   jmp loop                // if event_hanld is not set loop and read again event_handle
 !:  
+  inc VIC.BORDER_COLOR    // enable raster time bar show
   jsr music.play          // play the next part of the music
   jsr fineScroll          // fine scroll the screen
   jsr colorCycle          // slide the colorgradient to the left
-  
+
   ldx hard_scroll         // check hard scroll flag
   bne scrollTextWholeStep //if hard scroll set, scroolTextWholeStep and reset fine scroll to 7
   jmp !+                  // else exit interrupt routine
@@ -30,6 +31,7 @@ scrollTextWholeStep:
   sta VIC.XSCROLL         // set the new value to the XSCROLL
 !:
   dec event_handle        // we are done with this event triggered by the interrupt so dec it back to 0
+  dec VIC.BORDER_COLOR    //disable raster time bar show
   jmp loop                // loop again waiting for the next interrupt setting it's event_handle
 
 fineScroll:
@@ -70,7 +72,6 @@ scroller:
 !:
   lda VIC.SCREEN + OFFSET, x
   sta VIC.SCREEN + OFFSET - 1 , x
-
   lda VIC.SCREEN + OFFSET + 40 , x
   sta VIC.SCREEN + OFFSET + 40 - 1 , x
   inx
@@ -164,18 +165,23 @@ setup:
   lda #>irq1
   sta $0315
 
-  // enable interrupts
-  lda #$7b
+  // switch off interupts from CIAs
+  lda #$7f
   sta $dc0d
 
+  // clear most significant bit of VIC's raster register
+  and $D011            
+  sta $D011
+
   // enable raster interrups 
-  lda $d01a 
-  ora #1
+  lda #1
   sta $d01a
 
   // trigger the raster interrupt on line 00
-  lda #$00
+  lda #00
   sta $d012
+
+  asl $d019                   // accept current interrupt
   cli
 rts
 
