@@ -6,9 +6,10 @@ BasicUpstart2(main)
 
 main:
   jsr setup                 // setup routine will tell VIC where to find custom charset and clears the screen
+  jsr fillColorOnline     // cycle the colours in the text
   eventLoop:
     jsr text                // write text over and over again, as later on we will make this scroll    
-    jsr fillColorOnline     // cycle the colours in the text
+    jsr colorCycle
     jsr frameWait           // wait for a frame
     jmp eventLoop
 
@@ -19,6 +20,19 @@ frameWait:
    bne !raster-             // current rasterline not #$ff jump to raster, this way we sync drawing with raster line
 !end:    
 rts
+
+colorCycle:
+  ldx VIC.COLOR_RAM + OFFSET
+  ldy #1
+!:
+  lda VIC.COLOR_RAM + OFFSET + 1, y
+  sta VIC.COLOR_RAM + OFFSET + 40 , y
+  sta VIC.COLOR_RAM + OFFSET, y
+  iny
+  cpy #41
+  bne !-
+  sta VIC.COLOR_RAM + OFFSET + 39
+  rts
 
 getGradientColor:
   ldx gradientOffset 
@@ -44,11 +58,6 @@ fillColorOnline:
   cpy #$ff
   bne !-
   rts
-
-colorCycle:
- 
-    
-rts
 
 //Clear the VIC.SCREEN in 4 250 character blocks
 clearScreen:
