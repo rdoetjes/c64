@@ -9,9 +9,29 @@ main:
   jsr setup                 // setup routine will tell VIC where to find custom charset and clears the screen
   jsr fillColorOnline       // fill the lines for the text with the repeating color gradient
 
-everyFrame:
-    //jsr frameWait           // wait for rasterline (in essence waiting for the next frame)
-  jmp *
+loop:
+  lda event_handle
+  bne !+
+  jmp loop
+!:  
+  jsr music.play          // play the next part of the music
+
+  jsr fineScroll          // fine scroll the screen
+  jsr colorCycle          // slide the colorgradient to the left
+  
+  ldx hard_scroll         // check hard scroll flag
+  bne scrollTextWholeStep //if hard scroll set, scroolTextWholeStep and reset fine scroll to 7
+  jmp !+                  // else exit interrupt routine
+
+scrollTextWholeStep:
+  dec hard_scroll
+  jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
+  lda VIC.XSCROLL
+  ora #7
+  sta VIC.XSCROLL
+!:
+  dec event_handle        // we are done with this event so dec it back to 0
+  jmp loop
 
 frameWait:
    lda #$ff                 // loop until line 255 is drawn by the VIC
@@ -164,21 +184,7 @@ setup:
 rts
 
 irq1:
-  jsr music.play          // play the next part of the music
-
-  jsr fineScroll          // fine scroll the screen
-  jsr colorCycle          // slide the colorgradient to the left
-  
-  ldx hard_scroll         // check hard scroll flag
-  bne scrollTextWholeStep //if hard scroll set, scroolTextWholeStep and reset fine scroll to 7
-  jmp !+                  // else exit interrupt routine
-
-scrollTextWholeStep:
-  dec hard_scroll
-  jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
-  lda VIC.XSCROLL
-  ora #7
-  sta VIC.XSCROLL
+ inc event_handle
 !:
   asl $d019               // most efficient way to acknowledge the interrupt, so we can receive new raster interrupts
   //reload all registers as the were pushed by the irq
@@ -223,6 +229,9 @@ pointToRAMCharSet:
   ora #8                // set lowest 4 bits to 12, moving charset ram to $2000
   sta VIC.MEMORY_SETUP  // sta the configuration of screen ram and character ram offsets to VIC
 rts
+
+event_handle:
+  .byte 00
 
 hard_scroll:
   .byte 00
