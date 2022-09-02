@@ -207,7 +207,7 @@ text:
 !end:
 rts
 
-//Point to Charset in $3000, we use 3000 because we will later set a sid tune on 2000
+//Point to Charset in $2000, we use 2000 because we will later set a sid tune on 1000
 pointToRAMCharSet:
   lda VIC.MEMORY_SETUP
   // Table of lower nibble and the corresponding character ram address  
@@ -220,7 +220,7 @@ pointToRAMCharSet:
   // $D018 = %xxxx110x -> charmem is at $3000
   // $D018 = %xxxx111x -> charmem is at $3800
   and #240              // keep the upper 4 bits, so that screen RAM points to 0400
-  ora #12               // set lowest 4 bits to 12, moving charset ram to $3000
+  ora #8                // set lowest 4 bits to 12, moving charset ram to $2000
   sta VIC.MEMORY_SETUP  // sta the configuration of screen ram and character ram offsets to VIC
 rts
 
@@ -240,8 +240,8 @@ gradientOffset:
 gradientColor:
   .byte $07, $07, $0f, $0a, $0c, $04, $0b, $06, $06, $04, $0c, $0a, $0f, $0b
 
-*=music.location "Music"
+*=music.location "Music"    //for this sid tune it's $1000
   .fill music.size, music.getData(i)
 
-*=$3000                     //load charset in $3000
+*=$2000                     //load charset in $2000
 #import "charset_1.asm"     // load the charset_1.asm into this project, this charset is created using https://petscii.krissz.hu/ editor. Then exported to assembly and made to work with kickassembler
