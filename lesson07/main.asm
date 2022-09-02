@@ -21,6 +21,9 @@ frameWait:
 !end:    
 rts
 
+// this will slide the colors on the two lines pointed to by SCREEN + OFFSET to the left and inserts the first color at the back
+// in essence cycling the gradient around
+// clobbers, A, X and Y
 colorCycle:
   ldx VIC.COLOR_RAM + OFFSET
   ldy #1
@@ -34,6 +37,8 @@ colorCycle:
   sta VIC.COLOR_RAM + OFFSET + 39
   rts
 
+// returns the next color from the gradientColor array
+//clobbers X and A
 getGradientColor:
   ldx gradientOffset 
   cpx #14
@@ -48,6 +53,9 @@ getGradientColor:
   stx gradientOffset
   rts
 
+// Fills the colors of the gradientColors array over the two lines pointed to by COLOR+RAM + OFFSET, the gradient colors will
+// loop when we get to the end of the gradientColors array. In essence filling the lines with multiple copies of the gradientColors pallet
+// clobbers Y and A
 fillColorOnline:
   ldy #39
 !:
@@ -60,6 +68,7 @@ fillColorOnline:
   rts
 
 //Clear the VIC.SCREEN in 4 250 character blocks
+//clobbers X and A
 clearScreen:
   ldx #250
   lda #32 //blank tile in this map
@@ -72,6 +81,10 @@ clearScreen:
   bne !-
   rts
 
+//Sets up the demo, where the character ram is pointed to $3000
+// and the screen is cleared
+// and border and background are set to black
+// clobbers A, X and Y
 setup:
   jsr pointToRAMCharSet
     
@@ -82,18 +95,20 @@ setup:
   jsr clearScreen
 rts
 
+// Draws the line of text to the screen on localation SCREEN+OFFSET
+// The font we use is an "elongated font", that uses two characters, the top half and the bottom half.
+// The top and bottom part of each letter are offset by 127 characters
 text:
   ldx #$00
 !write:   
-  lda text1, X
-  cmp #$00
+  lda text1, x                          // load next character from the string text1
+  cmp #$00                              // keep printing the text tuill we find character 00
   beq !end+
    
-  sta VIC.SCREEN + OFFSET, x
-  adc #127
-  sta VIC.SCREEN + OFFSET + 40, x 
-  inx
-
+  sta VIC.SCREEN + OFFSET, x            // write top half of the character
+  adc #127                              // add 127 to the character to point to the bottom half of the character
+  sta VIC.SCREEN + OFFSET + 40, x       // write bottom half of the character on the next line
+  inx                                   // inc offset for chracter string and location on the screen
   jmp !write-
 !end:
 rts
@@ -125,6 +140,6 @@ gradientOffset:
 gradientColor:
   .byte $07, $07, $0f, $0a, $0c, $04, $0b, $06, $06, $04, $0c, $0a, $0f, $0b
 
-//load charset in $3000
-*=$3000
-#import "charset_1.asm"
+
+*=$3000                     //load charset in $3000
+#import "charset_1.asm"     // load the charset_1.asm into this project, this charset is created using https://petscii.krissz.hu/ editor. Then exported to assembly and made to work with kickassembler
