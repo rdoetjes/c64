@@ -69,7 +69,7 @@ text:
   beq !end+
    
   sta VIC.SCREEN + OFFSET, x
-  adc #31
+  adc #127
   sta VIC.SCREEN + OFFSET + 40, x 
   inx
 
@@ -112,4 +112,4 @@ gradientColor:
   .byte $01, $07, $0f, $0a, $0c, $04, $0b, $06, $06, $04, $0c, $0a, $0f, $07
 //load charset in $3000
 *=$3000
-.import binary "myset.bin" 
+#import "charset_1.asm"
