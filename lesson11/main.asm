@@ -8,9 +8,6 @@
 BasicUpstart2(main)
 
 main:
-  lda $d018
-  sta backup_charset
-
   jsr setup                 // setup routine will tell VIC where to find custom charset and clears the screen
   jsr fillColorOnline       // fill the lines for the text with the repeating color gradient
   jsr printHeader
@@ -130,7 +127,7 @@ fillColorOnline:
   sta VIC.COLOR_RAM, y
   sta VIC.COLOR_RAM + OFFSET, y
   sta VIC.COLOR_RAM + OFFSET + 40, y
-  lda #1
+  lda #$c
   sta VIC.COLOR_RAM + (20*40), y
   dey
   cpy #$ff
@@ -157,6 +154,9 @@ clearScreen:
 // and border and background are set to black
 // clobbers A, X and Y
 setup:
+  lda $d018
+  sta backup_charset
+
   lda #$00
   sta VIC.BORDER_COLOR
   sta VIC.SCREEN_COLOR
@@ -190,7 +190,7 @@ setup:
   lda #START_SCROLL_REGION
   sta $d012
 
-  // copy the xscroll 
+  // copy the xscroll, so we can set it to this store_cscroll version when we don't need to scroll 
   lda VIC.XSCROLL
   sta store_xscroll
 
@@ -283,8 +283,8 @@ printHeader:
   cmp #$00                              // keep printing the text tuill we find character 00
   beq !end+
    
-  sta VIC.SCREEN + 8, x                 // write message to top line in center
-  sta VIC.SCREEN + (20*40) + 8, x       // write message near the bottom in center
+  sta VIC.SCREEN, x                 // write message to top line in center
+  sta VIC.SCREEN + (20*40), x       // write message near the bottom in center
   inx                                   // inc offset for chracter string and location on the screen
   jmp !write-
 !end:
@@ -303,7 +303,7 @@ textOffset:
   .byte 00
 
 header:
-  .text "this is the standard font!"
+  .text "     default font and not scrolling!"
   .byte 00
 
 text1:
