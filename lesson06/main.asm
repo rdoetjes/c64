@@ -14,7 +14,7 @@ main:
   jsr fillScreen
 
 loop:
-  lda #$f0          // wait for raster line $f0 (so we only draw when that line has been reached)
+  lda #$ff          // wait for raster line $00 (so we only draw when that line has been reached)
 !:
   cmp RASTER_LINE   // check the value $f0 in A to the actual rasterline being drawn by the VIC chip
   bne !-            // if rasterline is not $f0 then jump and read rasterline until it is at $f0 (this is polling the raster line and is bad practice, but here we can get away with it)
@@ -55,7 +55,7 @@ fillColors:
   sta COLOR_RAM + $100, y       // fill the current color at this color ram location offset by $100
   sta COLOR_RAM + $200, y       // fill the current color at this color ram location offset by $200
   sta COLOR_RAM + $2e8, y       // fill the current color at this color ram location offset by $2e8
-  jsr getNextColor              // calling getNexColor again greates more "zigzag like strokes"; experiment with calling more or less of them
+  //jsr getNextColor              // calling getNexColor again greates more "zigzag like strokes"; experiment with calling more or less of them   
   dey                           // decrement y and if not 00 then continue filling colour ram
   bne !-
   rts                           // return from subroutine
