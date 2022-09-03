@@ -8,17 +8,14 @@ BasicUpstart2(main)
 main:
   jsr setup                 // setup routine will tell VIC where to find custom charset and clears the screen
   jsr fillColorOnline       // fill the lines for the text with the repeating color gradient
-
 loop:
   lda event_handle        // read event_handle
   bne !+                  // if event handle is not 0 then we had the irq trigger events
   jmp loop                // if event_hanld is not set loop and read again event_handle
 !:  
   inc VIC.BORDER_COLOR    // enable raster time bar show
-  jsr music.play          // play the next part of the music
-  jsr fineScroll          // fine scroll the screen
   jsr colorCycle          // slide the colorgradient to the left
-
+  jsr fineScroll          // fine scroll the screen
   ldx hard_scroll         // check hard scroll flag
   bne scrollTextWholeStep //if hard scroll set, scroolTextWholeStep and reset fine scroll to 7
   jmp !+                  // else exit interrupt routine
@@ -30,6 +27,7 @@ scrollTextWholeStep:
   ora #7                  // reset the lowest 3 bits back to all set (7), so we can dec and scroll left again
   sta VIC.XSCROLL         // set the new value to the XSCROLL
 !:
+  jsr music.play          // play the next part of the music
   dec event_handle        // we are done with this event triggered by the interrupt so dec it back to 0
   dec VIC.BORDER_COLOR    //disable raster time bar show
   jmp loop                // loop again waiting for the next interrupt setting it's event_handle
