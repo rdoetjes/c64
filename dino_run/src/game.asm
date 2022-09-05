@@ -16,7 +16,7 @@ draw:
   rts
 
 //takes care of loading the right animation cycle and moving the player sprite
-moveCharacter:  
+movePlayerCharacter:  
   lda playerState
   sta $0405
 
@@ -100,7 +100,7 @@ moveCharacter:
 
 // the game logic goes here
 gameLogic:
-  jsr moveCharacter   //move character based on joystick input
+  jsr movePlayerCharacter   //move character based on joystick input
   rts
 
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
