@@ -15,7 +15,6 @@ screenColor:
   lda #00
   sta $d020
   sta $d021
-  inc $d021
   rts
 
 dinoSprite:
@@ -56,6 +55,3 @@ setup:
   jsr dinoSprite
   jsr cactusSprite
   rts
-
-*=$2000
-#import "dino_sprite.asm"

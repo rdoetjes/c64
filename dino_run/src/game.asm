@@ -1,14 +1,104 @@
+#import "macros.asm"
+
 gameLoop:
+  jsr readInput
+  jsr gameLogic
+  jsr draw
   lda frame_counter
 !:
-  // quit the game when quit_game is not 0
-  //lda quit_game
-  //bne quit
-  jmp gameLoop 
-quit:
+  cmp frame_counter
+  beq !-
+  jmp gameLoop
+
+draw:
+  jsr dinoAnim
   rts
 
-rasterIntSetup:
+moveCharacter:
+  lda playerState
+  sta $0405
+
+  lda $ff         // copy of joystick
+  and #$02
+  beq !dug+
+  
+  lda $ff 
+  and #$80
+  sta $0401
+  beq !walk+
+  
+  lda $ff 
+  and #$01
+  sta $0401
+  beq !jump_up+
+
+  lda $ff 
+  and #$10
+  beq !jump_up+
+  rts
+
+  !walk:
+    lda #$00
+    cmp playerState
+    bne !changeState+
+    rts
+    !changeState:
+      copy4Sprites(dino_w_src, dino_0_4)
+      lda #$00
+      sta playerState
+      rts
+
+  !dug:
+    lda #$01
+    cmp playerState
+    bne !changeState+
+    rts
+    !changeState:
+      copy4Sprites(dino_d_src, dino_0_4)
+      lda #$01
+      sta playerState
+      rts
+
+  !jump_up:
+    lda #$02
+    cmp playerState
+    bne !changeState+
+    rts
+    !changeState:
+      lda #$02
+      sta playerState
+      copy4Sprites(dino_j_src, dino_0_4)
+      rts
+
+gameLogic:
+  jsr moveCharacter   //move character based on joystick input
+  rts
+  
+readInput:
+  lda $dc00
+  sta $ff
+  rts
+
+dinoAnim:
+  inc dino_anim_count
+  lda dino_anim_count
+  cmp #$05
+  beq !move_sprite+
+  rts
+  !move_sprite:
+    lda #$00
+    sta dino_anim_count
+    lda $07f8
+    cmp #$83
+    beq !reset_sprite+
+    inc $07f8
+    rts
+  !reset_sprite:
+    lda #$80
+    sta $07f8
+    rts
+
+gameStart:
   sei                         // disable interrupts
 
   lda #<rasterInt1            // setup rasterInt1
@@ -18,7 +108,7 @@ rasterIntSetup:
 
   lda #$7f
   sta $dc0d                   //acknowledge pending interrupts from CIA-1
-  sta $dd0d                   //acknowledge pending interrupts from CIA-2
+  sta $dd0e                   //acknowledge pending interrupts from CIA-2
 
   and $d011            
   sta $d011                   // clear most significant bit of vicii
@@ -30,19 +120,20 @@ rasterIntSetup:
   sta $d012                   //trigger raster interrupt on 7f
 
   asl $d019                   // accept current interrupt
-  cli
 
+  copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
+  cli
   rts
 
 game:
-  jsr rasterIntSetup
-  jsr gameLoop
+  jsr gameStart
+  jmp gameLoop
   rts
 
 rasterInt1:
   inc frame_counter
   lda frame_counter
-  sta SCREEN + 4
+  sta $0400
   asl $d019       // ack interrupt
   jmp $EA31 
   rti
@@ -55,3 +146,12 @@ score:
 
 frame_counter:
   .byte $00
+
+dino_anim_count:
+  .byte 00
+
+playerState:
+  .byte 00
+
+*=$2000
+#import "dino_sprite.asm"
