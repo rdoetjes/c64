@@ -4,10 +4,11 @@ gameLoop:
   jsr readInput
   jsr gameLogic
   jsr draw
+
   lda frame_counter
 !:
   cmp frame_counter
-  beq !-
+  beq !-                  //sync to the frame (frame counter is incremented by raster interrupt)
   jmp gameLoop
 
 draw:
@@ -22,6 +23,14 @@ moveCharacter:
   and #$02
   beq !dug+
   
+  lda $ff         // left
+  and #$04
+  beq !left+
+
+  lda $ff         // left
+  and #$08
+  beq !right+
+
   lda $ff 
   and #$80
   sta $0401
@@ -36,6 +45,24 @@ moveCharacter:
   and #$10
   beq !jump_up+
   rts
+
+  !left:
+    lda #25
+    cmp $d000
+    bne !move+
+    rts
+  !move:
+    dec $d000
+    rts
+
+  !right:
+    lda #$ff
+    cmp $d000
+    bne !move+
+    rts
+  !move:
+    inc $d000
+    rts
 
   !walk:
     lda #$00
