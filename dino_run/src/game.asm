@@ -6,9 +6,8 @@ gameLoop:
   jsr draw                // draw the new state
 
   lda frame_counter       
-!:
   cmp frame_counter
-  beq !-                  //sync to the frame (frame counter is incremented by raster interrupt)
+  beq *-3                  //sync to the frame (frame counter is incremented by raster interrupt)
   jmp gameLoop
 
 draw:
