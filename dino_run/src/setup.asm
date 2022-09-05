@@ -48,10 +48,49 @@ cactusSprite:
   sta $d028   //set sprite color
   rts
 
+
+// initialize the game and setup a raster interrupt that counts the frame_counter variable, which we will poll in game loop
+setupRasterInt:
+  sei                         // disable interrupts
+
+  lda #<rasterInt1            // setup rasterInt1
+  sta $0314
+  lda #>rasterInt1
+  sta $0315
+
+  lda #$fa
+  sta $dc0d                   //acknowledge pending interrupts from CIA-1
+  sta $dd0e                   //acknowledge pending interrupts from CIA-2
+
+  and $d011            
+  sta $d011                   // clear most significant bit of vicii
+  
+  lda #1
+  sta $d01a                   // enable raster interrupts
+
+  lda #210
+  sta $d012                   //trigger raster interrupt on 7f
+
+  asl $d019                   // accept current interrupt
+
+  copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
+  cli
+  rts
+
+// raster interrupt 1 that counts the frames
+rasterInt1:
+  inc frame_counter
+  lda frame_counter
+  sta $0400
+  asl $d019       // ack interrupt
+  jmp $EA31 
+  rti
+
 setup:
   lda #$00
   jsr screenColor
   jsr cls
   jsr dinoSprite
   jsr cactusSprite
+  jsr setupRasterInt
   rts
