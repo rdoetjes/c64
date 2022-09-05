@@ -82,7 +82,7 @@ readInput:
 dinoAnim:
   inc dino_anim_count
   lda dino_anim_count
-  cmp #$05
+  cmp #$8
   beq !move_sprite+
   rts
   !move_sprite:
@@ -106,7 +106,7 @@ gameStart:
   lda #>rasterInt1
   sta $0315
 
-  lda #$7f
+  lda #$fa
   sta $dc0d                   //acknowledge pending interrupts from CIA-1
   sta $dd0e                   //acknowledge pending interrupts from CIA-2
 
