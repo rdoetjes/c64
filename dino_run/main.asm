@@ -6,7 +6,6 @@ main:
   jsr game
   rts
 
-*=$1000
 #import "src/game.asm"
 #import "src/setup.asm"
 

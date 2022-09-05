@@ -86,8 +86,15 @@ rasterInt1:
   jmp $EA31 
   rti
 
+disableBasic:
+  lda #54
+  sta $01
+  rts
+
 // sets up the screen, interrupts and the sprites
 setup:
+  jsr disableBasic
+
   lda #$00
   jsr screenColor
 
