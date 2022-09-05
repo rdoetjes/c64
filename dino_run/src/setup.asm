@@ -29,7 +29,7 @@ dinoSprite:
   sta $d001   //set initial sprite position
 
   lda #$05     
-  sta $d027   //set sprite color
+  sta $d027   //set sprite color to green
   rts
 
 cactusSprite:
@@ -37,7 +37,7 @@ cactusSprite:
   sta $07f9   //load sprite offset
   lda $d015
   ora #2  
-  sta $d015   // enable sprite 1
+  sta $d015   // enable sprite 2
 
   lda #$9e
   sta $d002
@@ -45,7 +45,7 @@ cactusSprite:
   sta $d003   //set initial sprite position
 
   lda #$05     
-  sta $d028   //set sprite color
+  sta $d028   //set sprite color to green
   rts
 
 
@@ -86,11 +86,14 @@ rasterInt1:
   jmp $EA31 
   rti
 
+// sets up the screen, interrupts and the sprites
 setup:
   lda #$00
   jsr screenColor
+
   jsr cls
   jsr dinoSprite
   jsr cactusSprite
   jsr setupRasterInt
+  
   rts
