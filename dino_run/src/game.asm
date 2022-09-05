@@ -1,6 +1,6 @@
 gameLoop:
   lda frame_counter
-  sta SCREEN
+!:
   // quit the game when quit_game is not 0
   //lda quit_game
   //bne quit
