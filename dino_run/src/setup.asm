@@ -98,8 +98,3 @@ setup:
   jsr setupRasterInt
   
   rts
-
-  cleanup:
-    lda #54
-    sta $01
-    rts
