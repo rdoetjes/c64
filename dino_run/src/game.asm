@@ -147,7 +147,7 @@ readInput:
   cmp #3
   beq !+  // when the player is jumping (falling down from jump), then no input will be registered until the player is back down
 
-  joystick2State($80, $00) // neutral is walk
+  joystick2State($80, $00) // joystick neutral position go to walk state
   joystick2State($01, $02) // up  go to state jump
   joystick2State($10, $02) // button go to state jump
   joystick2State($02, $01) // down  go to dug
