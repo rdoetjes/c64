@@ -1,3 +1,6 @@
+#importonce 
+
+#import "vars.asm"
 
 .macro copy4Sprites(src_offset, target){
   ldx #0

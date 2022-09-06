@@ -1,3 +1,7 @@
+#importonce
+
+#import "vars.asm"
+#import "macros.asm"
 
 cls:
   ldx #250

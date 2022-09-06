@@ -6,7 +6,5 @@ main:
   jsr game
   rts
 
+#import "src/init.asm"
 #import "src/game.asm"
-#import "src/setup.asm"
-
-.label SCREEN = $0400
