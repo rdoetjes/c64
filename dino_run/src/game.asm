@@ -55,7 +55,7 @@ movePlayerCharacter:
 
 jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
   lda #$02
-  cmp playerState
+  cmp dino_animation_state
   bne !++
   lda jump_height
   cmp #25
