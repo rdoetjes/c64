@@ -18,85 +18,112 @@ draw:
 //takes care of loading the right animation cycle and moving the player sprite
 movePlayerCharacter:  
   lda playerState
-  sta $0405
+  sta $0401
 
-  lda $ff         // up, jump
-  and #$01
-  beq !jump_up+ 
-
-  lda $ff         // fire button is also jump
-  and #$10
-  beq !jump_up+
-
-  lda $ff         // down is dug
-  and #$02
+  cmp #0        //state jump coming down 
+  beq !walk+
+  cmp #1        //state jump coming down 
   beq !dug+
-  
-  lda $ff         // left
-  and #$04
+  cmp #2        //state jump up
+  beq !jump_up+
+  cmp #3        //state jump coming down 
+  beq !jump_down+
+  cmp #4        //move left
   beq !left+
-
-  lda $ff         // right
-  and #$08
+  cmp #5        //move left
   beq !right+
 
-  lda $ff         // neutral position (always moving)
-  and #$80
-  sta $0401
-  beq !walk+
-
+  !walk:
+    jsr walk
+    rts
+  !dug:
+    jsr dug
+    rts
+  !jump_up:
+    jsr jump_up
+    rts
+  !jump_down:
+    jsr jump_down
+    rts
+  !left:
+    jsr left
+    rts
+  !right:
+    jsr right
+    rts
   rts
 
-  !jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
-    lda #$02
-    cmp playerState
-    bne !changeState+
-    rts
-    !changeState:
-      copy4Sprites(dino_j_src, dino_0_4)
-      lda #$02
-      sta playerState
-      rts
+jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
+  lda #$02
+  cmp playerState
+  bne !++
+  lda jump_height
+  cmp #25
+  bcs !+
+  inc jump_height
+  dec $d001
+  rts
+  !: 
+  lda #$03
+  sta playerState
+  rts
+  !:
+  copy4Sprites(dino_j_src, dino_0_4)
+  lda #$02
+  sta dino_animation_state
+  rts
 
-  !left:          // move the player sprite to the left but not off screen!
-    lda #25
-    cmp $d000
-    bne !move+
-    rts
-  !move:
-    dec $d000
-    rts
+jump_down:
+  lda jump_height
+  cmp #$80
+  bcs !+
+  dec jump_height
+  inc $d001
+  rts
+  !: 
+  lda #$00
+  sta playerState       // change state back to normal walk
+  rts
 
-  !right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
-    lda #$ff
-    cmp $d000
-    bne !move+
-    rts
-  !move:
-    inc $d000
-    rts
+walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't need to hence the playerState
+  lda #$00
+  cmp dino_animation_state
+  bne !+
+  rts
+  !:
+  copy4Sprites(dino_w_src, dino_0_4)
+  lda #$00
+  sta dino_animation_state
+  rts
 
-  !walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't need to hence the playerState
-    lda #$00
-    cmp playerState
-    bne !changeState+
-    rts
-    !changeState:
-      copy4Sprites(dino_w_src, dino_0_4)
-      lda #$00
-      sta playerState
-      rts
+dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't need to hence the playerState
+  lda #$01
+  cmp dino_animation_state
+  bne !+
+  rts
+  !:
+  copy4Sprites(dino_d_src, dino_0_4)
+  lda #$01
+  sta dino_animation_state
+  rts
 
-  !dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't need to hence the playerState
-    lda #$01
-    cmp playerState
-    bne !changeState+
-    rts
-    !changeState:
-      copy4Sprites(dino_d_src, dino_0_4)
-      lda #$01
-      sta playerState
-      rts
+left:
+  lda #25
+  cmp $d000
+  bne !+
+  rts
+  !:
+  dec $d000
+  rts
+
+right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
+  lda #$ff
+  cmp $d000
+  bne !+
+  rts
+  !:
+  inc $d000
+  rts
 
 // the game logic goes here
 gameLogic:
@@ -107,6 +134,23 @@ gameLogic:
 readInput:
   lda $dc00
   sta $ff
+  
+  lda playerState
+  cmp #2
+  beq !+  // when the player is jumping, then no input will be registered until the player is back down
+  
+  lda playerState
+  cmp #3
+  beq !+  // when the player is jumping up, then no input will be registered until the player is back down
+
+  joystick2State($80, $00) // neutral is walk
+  joystick2State($01, $02) // up  go to state jump
+  joystick2State($10, $02) // button go to state jump
+  joystick2State($02, $01) // down  go to dug
+  joystick2State($04, $04) // left go to state left
+  joystick2State($08, $05) // right go to state right
+
+  !:
   rts
 
 // play the 4 step player animation sprites
@@ -134,6 +178,9 @@ game:
   jmp gameLoop
   rts
 
+jump_height:
+  .byte $00
+
 //flag to allow to exit the game
 quit_game:
   .byte $00
@@ -152,6 +199,9 @@ dino_anim_count:
 
 // the current state the player is in (allows for more efficient processing and handling events that take several frames, such as jump)
 playerState:
+  .byte 00
+
+dino_animation_state:
   .byte 00
 
 *=$2000

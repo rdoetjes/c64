@@ -7,3 +7,12 @@
     dex
     bne !-
 }
+
+.macro joystick2State(mask, state){
+  lda $ff         // up, jump
+  and #mask
+  bne !+
+  lda #state
+  sta playerState
+  !:
+}
