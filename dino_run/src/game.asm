@@ -84,6 +84,9 @@ jump_down:
   !: 
   lda #$00
   sta playerState       // change state back to normal walk
+  copy4Sprites(dino_w_src, dino_0_4)
+  lda #$00
+  sta dino_animation_state
   rts
 
 walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't need to hence the playerState
