@@ -75,8 +75,8 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
 
 jump_down:
   lda jump_height
-  cmp #$80
-  bcs !+
+  cmp #$00
+  beq !+
   dec jump_height
   inc $d001
   rts
