@@ -145,7 +145,7 @@ readInput:
   
   lda playerState
   cmp #3
-  beq !+  // when the player is jumping up, then no input will be registered until the player is back down
+  beq !+  // when the player is jumping (falling down from jump), then no input will be registered until the player is back down
 
   joystick2State($80, $00) // neutral is walk
   joystick2State($01, $02) // up  go to state jump
