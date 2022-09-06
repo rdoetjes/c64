@@ -18,40 +18,39 @@ draw:
 
 //takes care of loading the right animation cycle and moving the player sprite
 movePlayerCharacter:  
-  lda playerState
-  sta $0401
+lda playerState
+sta $0401
 
-  cmp #0        //state jump coming down 
-  beq !walk+
-  cmp #1        //state jump coming down 
-  beq !dug+
-  cmp #2        //state jump up
-  beq !jump_up+
-  cmp #3        //state jump coming down 
-  beq !jump_down+
-  cmp #4        //move left
-  beq !left+
-  cmp #5        //move left
-  beq !right+
+cmp #0        //state jump coming down 
+beq !walk+
+cmp #1        //state jump coming down 
+beq !dug+
+cmp #2        //state jump up
+beq !jump_up+
+cmp #3        //state jump coming down 
+beq !jump_down+
+cmp #4        //move left
+beq !left+
+cmp #5        //move left
+beq !right+
 
-  !walk:
-    jsr walk
-    rts
-  !dug:
-    jsr dug
-    rts
-  !jump_up:
-    jsr jump_up
-    rts
-  !jump_down:
-    jsr jump_down
-    rts
-  !left:
-    jsr left
-    rts
-  !right:
-    jsr right
-    rts
+!walk:
+  jsr walk
+  rts
+!dug:
+  jsr dug
+  rts
+!jump_up:
+  jsr jump_up
+  rts
+!jump_down:
+  jsr jump_down
+  rts
+!left:
+  jsr left
+  rts
+!right:
+  jsr right
   rts
 
 jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
