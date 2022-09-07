@@ -77,9 +77,34 @@ setupRasterInt:
 
   asl $d019                   // accept current interrupt
 
-  copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
   cli
   rts
+
+createLandscape:
+  ldx #0
+  !:
+    lda $d41b
+    and #15
+    adc #64
+    sta SCREEN + (11 * 40), x
+    lda #9
+    sta $d800 + (11 * 40), x
+    //burn nops to get to new random number (SID chip refreshed every 16 cycles)
+    nop
+    nop
+    nop
+    nop
+    nop
+    lda $d41b
+    and #15
+    adc #80
+    sta SCREEN + (12 * 40), x
+    lda #9
+    sta $d800 + (12 * 40), x
+    inx
+    cpx #40
+    bne !-
+    rts
 
 // raster interrupt 1 that counts the frames
 rasterInt1:
@@ -90,6 +115,29 @@ rasterInt1:
   jmp $EA31 
   rti
 
+setupSid4Noise:                 
+  lda #$ff                      // load a with 255, which is highest frequence when put in, voice lb and voice hb       
+  sta SID_VOICE3_LB             // set frequence in frequency low byte to 255 (highest frequence)
+  sta SID_VOICE3_LB+1           // set frequence in frequency low byte to 255 (highest frequence)
+  lda #SID_WAV_NOISE            // load a wuth $80 (128) which is noise wave when store in SID_VOICE3_CTRL
+  sta SID_VOICE3_CTRL           // set voice 3 control register to play a noise wave
+  rts
+
+setupCharset:
+  lda $d018
+  // Table of lower nibble and the corresponding character ram address  
+  // $D018 = %xxxx000x -> charmem is at $0000
+  // $D018 = %xxxx001x -> charmem is at $0800
+  // $D018 = %xxxx010x -> charmem is at $1000
+  // $D018 = %xxxx011x -> charmem is at $1800
+  // $D018 = %xxxx100x -> charmem is at $2000
+  // $D018 = %xxxx101x -> charmem is at $2800
+  // $D018 = %xxxx110x -> charmem is at $3000
+  // $D018 = %xxxx111x -> charmem is at $3800
+  and #240              // keep the upper 4 bits, so that screen RAM points to 0400
+  ora #12               // set to $1800
+  sta $d018             // sta the configuration of screen ram and character ram offsets to VIC
+  rts
 
 // sets up the screen, interrupts and the sprites
 setup:
@@ -97,8 +145,12 @@ setup:
   jsr screenColor
 
   jsr cls
+  jsr setupSid4Noise
+  jsr setupCharset
   jsr dinoSprite
   jsr cactusSprite
+  copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
+  jsr createLandscape
   jsr setupRasterInt
   
   rts
