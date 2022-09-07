@@ -1,6 +1,5 @@
 #importonce
 
-#import "vars.asm"
 #import "macros.asm"
 
 cls:

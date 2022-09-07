@@ -1,5 +1,4 @@
 #import "macros.asm"
-#import "vars.asm"
 
 gameLoop:
   jsr readInput           // read the joystick input
@@ -180,3 +179,5 @@ dinoAnim:
 game:
   jmp gameLoop
   rts
+
+  #import "vars.asm"
