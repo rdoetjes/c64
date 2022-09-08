@@ -29,6 +29,7 @@ dinoSprite:
 
   lda #$80
   sta $d000
+  lda #$e0
   sta $d001   //set initial sprite position
 
   lda #$05     
@@ -71,7 +72,7 @@ setupRasterInt:
   lda #1
   sta $d01a                   // enable raster interrupts
 
-  lda #$fa
+  lda #$00
   sta $d012                   //trigger raster interrupt on 7f
 
   asl $d019                   // accept current interrupt

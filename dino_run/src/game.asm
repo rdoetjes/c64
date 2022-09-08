@@ -5,8 +5,8 @@ gameLoop:
   cmp frame_counter
   beq *-3
   jsr readInput           // read the joystick input
-  jsr gameLogic           // process through the input and collision detection etc
   jsr draw
+  jsr gameLogic           // process through the input and collision detection etc
   jmp gameLoop
 
 // draw the new state
