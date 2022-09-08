@@ -108,8 +108,6 @@ createLandscape:
 // raster interrupt 1 that counts the frames
 rasterInt1:
   inc frame_counter
-  lda frame_counter
-  sta $0400
   asl $d019       // ack interrupt
   jmp $EA31 
   rti

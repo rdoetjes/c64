@@ -1,14 +1,14 @@
 #import "macros.asm"
 
 gameLoop:
+  inc $d020
   jsr readInput           // read the joystick input
   jsr gameLogic           // process through the input and collision detection etc
-
-  ; lda frame_counter       //sync to the frame (frame counter is incremented by raster interrupt)       
-  ; cmp frame_counter
-  ; beq *-3 
-  jsr draw                // draw the new state                 
-
+  jsr draw                // draw the new state          
+  dec $d020
+  lda #$f0
+  cmp $d012
+  bne *-3
   jmp gameLoop
 
 // draw the new state
