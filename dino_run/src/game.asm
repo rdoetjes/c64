@@ -13,8 +13,8 @@ gameLoop:
 
 // draw the new state
 draw:
-  jsr scrollBg
   jsr dinoAnim            // change the dino sprites depending on the joystick input
+  jsr scrollBg
   rts
 
 //takes care of loading the right animation cycle and moving the player sprite
@@ -178,6 +178,22 @@ dinoAnim:
     rts
 
 scrollBg:
+  dec $d016               // decrement the VIC.XSCROLL which will only effect bits 0,1,2
+  lda $d016               // load the value from VIC.XSCROLLL
+  and #7                  // keep last three bits intact
+  cmp #0                  // check if it's 0 if inc hard_scroll to signal the event_loop to hard scroll left
+  beq !+
+  jmp !++
+!:
+  jsr scrollBgBig         // set flag to do a whole byte hard scroll
+  // reset the bottom 3 bits to high again so we can count back without harming the upper bit
+  lda $d016           
+  ora #7
+  sta $d016
+!:
+  rts
+
+scrollBgBig:
   ldx #1
   !:
   lda SCREEN + (BG_LINE * 40), x
