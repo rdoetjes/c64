@@ -27,7 +27,7 @@ dino_animation_state:
   .byte 00
 
 scroll_speed_layer:
-  .byte $01, $01, $01
+  .byte $03, $03, $01
 
 scroll_position_layer:
   .byte $07, $07, $07
