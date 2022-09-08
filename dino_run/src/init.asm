@@ -85,9 +85,9 @@ createLandscape:
     lda $d41b
     and #15
     adc #64
-    sta SCREEN + (11 * 40), x
+    sta SCREEN + (BG_LINE * 40), x
     lda #9
-    sta $d800 + (11 * 40), x
+    sta $d800 + (BG_LINE * 40), x
     //burn nops to get to new random number (SID chip refreshed every 16 cycles)
     nop
     nop
@@ -97,9 +97,9 @@ createLandscape:
     lda $d41b
     and #15
     adc #80
-    sta SCREEN + (12 * 40), x
+    sta SCREEN + ((BG_LINE+1) * 40), x
     lda #9
-    sta $d800 + (12 * 40), x
+    sta $d800 + ((BG_LINE +1) * 40), x
     inx
     cpx #40
     bne !-

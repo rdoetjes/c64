@@ -5,13 +5,15 @@ gameLoop:
   jsr gameLogic           // process through the input and collision detection etc
   jsr draw                // draw the new state
 
-  lda frame_counter       
+  lda frame_counter       //sync to the frame (frame counter is incremented by raster interrupt)       
   cmp frame_counter
-  beq *-3                  //sync to the frame (frame counter is incremented by raster interrupt)
+  beq *-3 
+                 
   jmp gameLoop
 
 // draw the new state
 draw:
+  jsr scrollBg
   jsr dinoAnim            // change the dino sprites depending on the joystick input
   rts
 
@@ -174,6 +176,26 @@ dinoAnim:
     lda #$80
     sta $07f8
     rts
+
+scrollBg:
+  ldx #1
+  !:
+  lda SCREEN + (BG_LINE * 40), x
+  sta SCREEN + (BG_LINE * 40) - 1, x
+  lda SCREEN + ((BG_LINE+1) * 40), x
+  sta SCREEN + ((BG_LINE+1) * 40) - 1, x
+  inx
+  cpx #40 
+  bne !-
+  lda SID_OSC3_RO
+  and #15
+  adc #64
+  sta SCREEN + (BG_LINE * 40) + 39
+  lda SID_OSC3_RO
+  and #15
+  adc #80
+  sta SCREEN + ((BG_LINE+1) * 40) + 39
+  rts
 
 // initialize the game, entry point from main
 game:

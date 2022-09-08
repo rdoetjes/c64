@@ -37,3 +37,4 @@ dino_animation_state:
 .label SID_VOICE3_CTRL = $d412  //voice 3 control register (to select wave type)
 .label SID_WAV_NOISE = $80      //128 dec, when put in voice3 control register it will select noise wave type
 .label SID_OSC3_RO = $d41b      //this will contain the amplitude value of the noise at moment of reading (because wave is noise it's random)
+.label BG_LINE = 11
