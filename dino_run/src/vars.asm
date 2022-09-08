@@ -26,8 +26,11 @@ playerState:
 dino_animation_state:
   .byte 00
 
-scroll_speed_bg:
-  .byte $01, $02, $04
+scroll_speed_layer:
+  .byte $01, $01, $01
+
+scroll_position_layer:
+  .byte $07, $07, $07
 
 *=$2000
 #import "dino_sprite.asm"

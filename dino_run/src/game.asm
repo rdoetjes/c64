@@ -3,56 +3,56 @@
 gameLoop:
   jsr readInput           // read the joystick input
   jsr gameLogic           // process through the input and collision detection etc
-  jsr draw                // draw the new state
 
-  lda frame_counter       //sync to the frame (frame counter is incremented by raster interrupt)       
-  cmp frame_counter
-  beq *-3 
-                 
+  ; lda frame_counter       //sync to the frame (frame counter is incremented by raster interrupt)       
+  ; cmp frame_counter
+  ; beq *-3 
+  jsr draw                // draw the new state                 
+
   jmp gameLoop
 
 // draw the new state
 draw:
+  jsr Background
   jsr dinoAnim            // change the dino sprites depending on the joystick input
-  jsr scrollBg
   rts
 
 //takes care of loading the right animation cycle and moving the player sprite
 movePlayerCharacter:  
-lda playerState
-sta $0401
+  lda playerState
+  sta $0401
 
-cmp #0        //state jump coming down 
-beq !walk+
-cmp #1        //state jump coming down 
-beq !dug+
-cmp #2        //state jump up
-beq !jump_up+
-cmp #3        //state jump coming down 
-beq !jump_down+
-cmp #4        //move left
-beq !left+
-cmp #5        //move left
-beq !right+
+  cmp #0        //state jump coming down 
+  beq !walk+
+  cmp #1        //state jump coming down 
+  beq !dug+
+  cmp #2        //state jump up
+  beq !jump_up+
+  cmp #3        //state jump coming down 
+  beq !jump_down+
+  cmp #4        //move left
+  beq !left+
+  cmp #5        //move left
+  beq !right+
 
-!walk:
-  jsr walk
-  rts
-!dug:
-  jsr dug
-  rts
-!jump_up:
-  jsr jump_up
-  rts
-!jump_down:
-  jsr jump_down
-  rts
-!left:
-  jsr left
-  rts
-!right:
-  jsr right
-  rts
+  !walk:
+    jsr walk
+    rts
+  !dug:
+    jsr dug
+    rts
+  !jump_up:
+    jsr jump_up
+    rts
+  !jump_down:
+    jsr jump_down
+    rts
+  !left:
+    jsr left
+    rts
+  !right:
+    jsr right
+    rts
 
 jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
   lda #$02
@@ -132,6 +132,7 @@ right:         // move the player sprite to the right but not use the high bit, 
 // the game logic goes here
 gameLogic:
   jsr movePlayerCharacter   //move character based on joystick input
+  jsr scrollBgLogic
   rts
 
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
@@ -177,23 +178,35 @@ dinoAnim:
     sta $07f8
     rts
 
-scrollBg:
-  dec $d016               // decrement the VIC.XSCROLL which will only effect bits 0,1,2
-  lda $d016               // load the value from VIC.XSCROLLL
-  and #7                  // keep last three bits intact
-  cmp #0                  // check if it's 0 if inc hard_scroll to signal the event_loop to hard scroll left
-  beq !+
-  jmp !++
+scrollBgLogic:
+  ldx #$02
 !:
-  jsr scrollBgBig         // set flag to do a whole byte hard scroll
-  // reset the bottom 3 bits to high again so we can count back without harming the upper bit
-  lda $d016           
-  ora #7
-  sta $d016
+  lda scroll_position_layer, x
+  sec
+  sbc scroll_speed_layer, x
+  bcs !+
+  lda #$07
 !:
+  sta scroll_position_layer, x
+  dex
+  bpl !--
   rts
 
-scrollBgBig:
+Background:
+  ldx #$02
+!:
+  lda scroll_position_layer, x
+  cmp #$07
+  bne !+
+  jsr HardScroll
+  lda #$07
+!:
+  sta $d016
+  dex
+  bpl !-
+  rts
+
+HardScroll:
   ldx #1
   !:
   lda SCREEN + (BG_LINE * 40), x
@@ -205,11 +218,11 @@ scrollBgBig:
   bne !-
   lda SID_OSC3_RO
   and #15
-  adc #64
+  adc #63
   sta SCREEN + (BG_LINE * 40) + 39
   lda SID_OSC3_RO
   and #15
-  adc #80
+  adc #79
   sta SCREEN + ((BG_LINE+1) * 40) + 39
   rts
 

@@ -71,7 +71,7 @@ setupRasterInt:
   lda #1
   sta $d01a                   // enable raster interrupts
 
-  lda #210
+  lda #255
   sta $d012                   //trigger raster interrupt on 7f
 
   asl $d019                   // accept current interrupt
