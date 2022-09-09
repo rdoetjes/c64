@@ -1,5 +1,15 @@
 #import "macros.asm"
 
+// raster interrupt 1 that counts the frames
+gameIrq:
+  jsr draw
+  inc frame_counter
+  jsr readInput           // read the joystick input
+  jsr gameLogic           // process through the input and collision detection etc
+  asl $d019       // ack interrupt
+  jmp $EA31 
+  rti
+  
 gameLoop:
   // game is driven by IRQ 1 defined in init.
   jmp gameLoop

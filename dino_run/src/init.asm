@@ -22,7 +22,7 @@ screenColor:
 
 dinoSprite:
   lda #$80
-  sta $07f8   //load sprite offset
+  sta SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
   lda $d015
   ora #1  
   sta $d015   // enable sprite 1
@@ -38,7 +38,7 @@ dinoSprite:
 
 cactusSprite:
   lda #$81
-  sta $07f9   //load sprite offset
+  sta SCREEN + $03f9   //load sprite offset
   lda $d015
   ora #2  
   sta $d015   // enable sprite 2
@@ -57,9 +57,9 @@ cactusSprite:
 setupRasterInt:
   sei                         // disable interrupts
 
-  lda #<rasterInt1            // setup rasterInt1
+  lda #<gameIrq               // setup gameIrq which is basically the game loop
   sta $0314
-  lda #>rasterInt1
+  lda #>gameIrq
   sta $0315
 
   lda #$fa
@@ -105,16 +105,6 @@ createLandscape:
     cpx #40
     bne !-
     rts
-
-// raster interrupt 1 that counts the frames
-rasterInt1:
-  jsr draw
-  inc frame_counter
-  jsr readInput           // read the joystick input
-  jsr gameLogic           // process through the input and collision detection etc
-  asl $d019       // ack interrupt
-  jmp $EA31 
-  rti
 
 setupSid4Noise:                 
   lda #$ff                      // load a with 255, which is highest frequence when put in, voice lb and voice hb       
