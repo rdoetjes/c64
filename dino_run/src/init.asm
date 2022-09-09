@@ -108,7 +108,10 @@ createLandscape:
 
 // raster interrupt 1 that counts the frames
 rasterInt1:
+  jsr draw
   inc frame_counter
+  jsr readInput           // read the joystick input
+  jsr gameLogic           // process through the input and collision detection etc
   asl $d019       // ack interrupt
   jmp $EA31 
   rti
