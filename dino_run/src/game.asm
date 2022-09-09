@@ -26,12 +26,11 @@ gameCycle:
   rts
 
 gameLogic:
-
+  jsr movePlayerCharacter   //move character based on joystick input
+  jsr scrollBgLogic
   rts
 
 draw:
-  jsr movePlayerCharacter   //move character based on joystick input
-  jsr scrollBgLogic
   jsr Background
   jsr dinoAnim            // change the dino sprites depending on the joystick input
   rts
@@ -131,12 +130,22 @@ dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't nee
   rts
 
 left:
-  lda #25
+  lda #30
   cmp $d000
   bne !+
   rts
   !:
-  dec $d000
+  sec
+  lda $d000
+  sbc scroll_speed_layer+2
+  cmp #30
+  bcc !+
+  sta $d000
+  jmp !++
+  !:
+  lda #30
+  sta $d000
+  !:
   rts
 
 right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
@@ -145,7 +154,16 @@ right:         // move the player sprite to the right but not use the high bit, 
   bne !+
   rts
   !:
-  inc $d000
+  clc
+  lda $d000
+  adc scroll_speed_layer+2
+  bcs !+
+  sta $d000
+  jmp !++
+  !:
+  lda #$ff
+  sta $d000
+  !:
   rts
 
 // the game logic goes here
