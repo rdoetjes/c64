@@ -272,18 +272,21 @@ jumpSound:
   lda #$ff
   sta $d406
   
-  lda #$80
+  lda #$10
   sta $d400
   sta $d401
   
-  lda #%00100000
+  lda #%10100001
   sta $d404
 
-  lda #$0f
+  lda #$f8
   sta $d406
   
-  lda #$05
+  lda #$0f
   sta $d418 
+
+  lda #%00100000
+  sta $d404
   rts
 
   #import "vars.asm"

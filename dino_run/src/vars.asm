@@ -46,3 +46,5 @@ scroll_position_layer:
 .label BG_LINE = 23
 .label MAX_LEFT_POS = 40
 .label MAX_RIGHT_POS = 230
+.label sfx1_ptr = $73
+.label sfx2_ptr = $75
