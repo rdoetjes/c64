@@ -138,18 +138,18 @@ left:
   sec
   lda $d000
   sbc scroll_speed_layer+2
-  cmp #30
+  cmp #MAX_LEFT_POS
   bcc !+
   sta $d000
   jmp !++
   !:
-  lda #30
+  lda #MAX_LEFT_POS
   sta $d000
   !:
   rts
 
 right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
-  lda #$ff
+  lda #MAX_RIGHT_POS
   cmp $d000
   bne !+
   rts
@@ -161,7 +161,7 @@ right:         // move the player sprite to the right but not use the high bit, 
   sta $d000
   jmp !++
   !:
-  lda #$ff
+  lda #MAX_RIGHT_POS
   sta $d000
   !:
   rts

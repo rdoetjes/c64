@@ -27,7 +27,7 @@ dino_animation_state:
   .byte 00
 
 scroll_speed_layer:
-  .byte $03, $03, $03
+  .byte $03, $03, $01
 
 scroll_position_layer:
   .byte $07, $07, $07
@@ -44,3 +44,5 @@ scroll_position_layer:
 .label SID_WAV_NOISE = $80      //128 dec, when put in voice3 control register it will select noise wave type
 .label SID_OSC3_RO = $d41b      //this will contain the amplitude value of the noise at moment of reading (because wave is noise it's random)
 .label BG_LINE = 23
+.label MAX_LEFT_POS = 30
+.label MAX_RIGHT_POS = 230
