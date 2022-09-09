@@ -133,6 +133,8 @@ setup:
   
   lda #$35                    // disabel kernal and basic
 	sta $01
+  jsr setupRasterInt
+
 
   lda #$00
   jsr screenColor
@@ -144,7 +146,6 @@ setup:
   jsr cactusSprite
   copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
   jsr createLandscape
-  jsr setupRasterInt
 
   cli                           // enable interrupts
 

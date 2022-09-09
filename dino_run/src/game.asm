@@ -4,8 +4,12 @@
 gameIrq:
   pushall()
   inc frame_counter
+  lda frame_counter
+  sta $0402
   jsr gameCycle
   popall()
+  // bit $dc0d   	          // reading the interrupt control registers 
+  // bit $dd0d	              // clears them
   asl $d019               // ack interrupt
   rti
 
