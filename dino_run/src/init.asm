@@ -45,7 +45,7 @@ cactusSprite:
 
   lda #$9e
   sta $d002
-  lda #$80
+  lda #$e0
   sta $d003   //set initial sprite position
 
   lda #$05     
