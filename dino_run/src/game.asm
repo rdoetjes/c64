@@ -90,6 +90,7 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   copy4Sprites(dino_j_src, dino_0_4)
   lda #$02
   sta dino_animation_state
+  jsr jumpSound
   rts
 
 jump_down:
@@ -265,6 +266,24 @@ HardScroll:
 // initialize the game, entry point from main
 game:
   jmp gameLoop
+  rts
+
+jumpSound:
+  lda #$ff
+  sta $d406
+  
+  lda #$80
+  sta $d400
+  sta $d401
+  
+  lda #%00100000
+  sta $d404
+
+  lda #$0f
+  sta $d406
+  
+  lda #$05
+  sta $d418 
   rts
 
   #import "vars.asm"
