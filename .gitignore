@@ -2,5 +2,5 @@
 *.sym
 buildlog.txt
 bin/*
-bin/*
+bin/log*
 
