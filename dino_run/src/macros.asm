@@ -17,3 +17,19 @@
   sta playerState
   !:
 }
+
+.macro pushall(){
+  pha
+  txa
+  pha
+  tya
+  pha
+}
+
+.macro popall(){
+  pla
+  tay
+  pla
+  tax
+  pla
+}

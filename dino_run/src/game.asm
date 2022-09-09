@@ -2,20 +2,32 @@
 
 // raster interrupt 1 that counts the frames
 gameIrq:
-  jsr draw
+  pushall()
   inc frame_counter
-  jsr readInput           // read the joystick input
-  jsr gameLogic           // process through the input and collision detection etc
-  asl $d019       // ack interrupt
-  jmp $EA31 
+  jsr gameCycle
+  popall()
+  asl $d019               // ack interrupt
   rti
-  
+
 gameLoop:
   // game is driven by IRQ 1 defined in init.
   jmp gameLoop
 
 // draw the new state
+gameCycle:
+  jsr readInput           // process the input from the user
+  jsr gameLogic           // collision detection 
+  jsr draw                // draw bg and user and enemy
+!:
+  rts
+
+gameLogic:
+
+  rts
+
 draw:
+  jsr movePlayerCharacter   //move character based on joystick input
+  jsr scrollBgLogic
   jsr Background
   jsr dinoAnim            // change the dino sprites depending on the joystick input
   rts
@@ -133,9 +145,8 @@ right:         // move the player sprite to the right but not use the high bit, 
   rts
 
 // the game logic goes here
-gameLogic:
-  jsr movePlayerCharacter   //move character based on joystick input
-  jsr scrollBgLogic
+gameInput:
+    jsr readInput           // read the joystick input
   rts
 
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
