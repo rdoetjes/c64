@@ -1,11 +1,7 @@
 #import "macros.asm"
 
 gameLoop:
-  // lda frame_counter
-  // cmp frame_counter
-  // beq *-3
-  //jsr draw
-  
+  // game is driven by IRQ 1 defined in init.
   jmp gameLoop
 
 // draw the new state
