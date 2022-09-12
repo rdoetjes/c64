@@ -1,4 +1,3 @@
-
 BasicUpstart2(main)
 
 main:
@@ -8,3 +7,6 @@ main:
 
 #import "src/init.asm"
 #import "src/game.asm"
+#import "src/macros.asm"
+#import "src/background.asm"
+#import "src/player.asm"
