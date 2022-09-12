@@ -124,6 +124,7 @@ right:         // move the player sprite to the right but not use the high bit, 
   clc
   lda $d000
   adc scroll_speed_layer+2
+  cmp #MAX_RIGHT_POS
   bcs !+
   sta $d000
   jmp !++
