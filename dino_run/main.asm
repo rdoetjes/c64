@@ -11,15 +11,15 @@ main:
 
 
 // load all this after the basic upstart and make it easily relocatable.
-*=$2000 "Sprites"
+* = $2000 "Sprites"
 #import "src/assets/sprites/dino_sprite.asm"
 
-*=$3000 "Charset"
+* = $3000 "Charset"
 #import "src/assets/charset/charset.asm"
 
-* = $8000 "Gamecode"
-#import "src/vars.asm"         // game loop vars.
+* = $4000 "Gamecode"
 #import "src/game.asm"
+#import "src/vars.asm"         // game loop vars.
 #import "src/background.asm"
 #import "src/player.asm"
 #import "src/obstacle.asm"
