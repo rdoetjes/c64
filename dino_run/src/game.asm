@@ -7,14 +7,8 @@ gameIrq:
   sta $0402
   jsr gameCycle
   popall()
-  // bit $dc0d   	          // reading the interrupt control registers 
-  // bit $dd0d	              // clears them
   asl $d019               // ack interrupt
   rti
-
-gameLoop:
-  // game is driven by IRQ 1 defined in init.
-  jmp gameLoop
 
 // draw the new state
 gameCycle:
@@ -62,9 +56,9 @@ readInput:
   !:
   rts
 
-// initialize the game, entry point from main
+// the game runs from a raster interrupt, hence we just loop here.
+//Perhaps we will create an exit state so we can return... NAAH probably not.
 game:
-  lda #$ff
   jmp *
   rts
 
