@@ -38,6 +38,7 @@ readInput:
   lda $dc00
   sta $ff
   
+  //player states are managed and handled in the player.asm code
   lda playerState
   cmp #2
   beq !+  // when the player is jumping, then no input will be registered until the player is back down
@@ -46,6 +47,7 @@ readInput:
   cmp #3
   beq !+  // when the player is jumping (falling down from jump), then no input will be registered until the player is back down
 
+  //player states are managed and handled in the player.asm code
   joystick2State($80, $00) // joystick neutral position go to walk state
   joystick2State($01, $02) // up  go to state jump
   joystick2State($10, $02) // button go to state jump
