@@ -21,11 +21,6 @@ scroll_speed_layer:
 scroll_position_layer:
   .byte $07, $07, $07
 
-*=$2000 "sprites"
-#import "assets/sprites/dino_sprite.asm"
-
-*=$3000 "charset"
-#import "charset.asm"
 
 .label SCREEN = $0400
 .label SID_VOICE3_LB = $d40e    //voice 3 lowbyte for requence
