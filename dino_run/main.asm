@@ -19,7 +19,6 @@ main:
 
 * = $3800 "Gamecode"
 #import "src/game.asm"
-#import "src/general_game_vars.asm"         // general game variables, player or obstacle vars are located in their source files.
 #import "src/background.asm"
 #import "src/player.asm"
 #import "src/obstacle.asm"
