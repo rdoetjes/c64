@@ -1,5 +1,6 @@
 BasicUpstart2(main)
 
+// this goes into basic code, as we use basic upstart and in basic we switch out the BASIC and KERNAL rom
 #import "src/init.asm"
 #import "src/macros.asm"
 
