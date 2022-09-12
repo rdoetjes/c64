@@ -64,6 +64,7 @@ readInput:
 
 // initialize the game, entry point from main
 game:
+  lda #$ff
   jmp *
   rts
 

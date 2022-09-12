@@ -15,27 +15,16 @@ score:
 frame_counter:
   .byte $00
 
-// dino sprite counter, each dino sprite has 4 animation steps (0-3)
-dino_anim_count:
-  .byte 00
-
-// the current state the player is in (allows for more efficient processing and handling events that take several frames, such as jump)
-playerState:
-  .byte 00
-
-dino_animation_state:
-  .byte 00
-
 scroll_speed_layer:
   .byte $03, $03, $03
 
 scroll_position_layer:
   .byte $07, $07, $07
 
-*=$2000
-#import "dino_sprite.asm"
+*=$2000 "sprites"
+#import "assets/sprites/dino_sprite.asm"
 
-*=$3000
+*=$3000 "charset"
 #import "charset.asm"
 
 .label SCREEN = $0400

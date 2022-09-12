@@ -20,39 +20,6 @@ screenColor:
   sta $d021
   rts
 
-dinoSprite:
-  lda #$80
-  sta SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
-  lda $d015
-  ora #1  
-  sta $d015   // enable sprite 1
-
-  lda #$80
-  sta $d000
-  lda #$e0
-  sta $d001   //set initial sprite position
-
-  lda #$05     
-  sta $d027   //set sprite color to green
-  rts
-
-cactusSprite:
-  lda #$81
-  sta SCREEN + $03f9   //load sprite offset
-  lda $d015
-  ora #2  
-  sta $d015   // enable sprite 2
-
-  lda #$9e
-  sta $d002
-  lda #$e0
-  sta $d003   //set initial sprite position
-
-  lda #$05     
-  sta $d028   //set sprite color to green
-  rts
-
-
 // initialize the game and setup a raster interrupt that counts the frame_counter variable, which we will poll in game loop
 setupRasterInt:
   lda #$7f
@@ -76,32 +43,6 @@ setupRasterInt:
 
   asl $d019                   // accept current interrupt
   rts
-
-createLandscape:
-  ldx #0
-  !:
-    lda $d41b
-    and #15
-    adc #64
-    sta SCREEN + (BG_LINE * 40), x
-    lda #9
-    sta $d800 + (BG_LINE * 40), x
-    //burn nops to get to new random number (SID chip refreshed every 16 cycles)
-    nop
-    nop
-    nop
-    nop
-    nop
-    lda $d41b
-    and #15
-    adc #80
-    sta SCREEN + ((BG_LINE+1) * 40), x
-    lda #9
-    sta $d800 + ((BG_LINE +1) * 40), x
-    inx
-    cpx #40
-    bne !-
-    rts
 
 setupSid4Noise:                 
   lda #$ff                      // load a with 255, which is highest frequence when put in, voice lb and voice hb       

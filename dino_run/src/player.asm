@@ -1,5 +1,21 @@
 #importonce
 
+dinoSprite:
+  lda #$80
+  sta SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
+  lda $d015
+  ora #1  
+  sta $d015   // enable sprite 1
+
+  lda #$80
+  sta $d000
+  lda #$e0
+  sta $d001   //set initial sprite position
+
+  lda #$05     
+  sta $d027   //set sprite color to green
+  rts
+
 //takes care of loading the right animation cycle and moving the player sprite
 movePlayerCharacter:  
   lda playerState
@@ -175,3 +191,14 @@ jumpSound:
   lda #%00100000
   sta $d404
   rts
+
+  // dino sprite counter, each dino sprite has 4 animation steps (0-3)
+dino_anim_count:
+  .byte 00
+
+// the current state the player is in (allows for more efficient processing and handling events that take several frames, such as jump)
+playerState:
+  .byte 00
+
+dino_animation_state:
+  .byte 00
