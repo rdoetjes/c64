@@ -202,3 +202,6 @@ playerState:
 
 dino_animation_state:
   .byte 00
+
+jump_height:
+  .byte $00

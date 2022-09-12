@@ -1,3 +1,4 @@
+  #import "general_game_vars.asm"
 
 // raster interrupt 1 that counts the frames
 gameIrq:
@@ -63,5 +64,3 @@ readInput:
 game:
   jmp *
   rts
-
-  #import "vars.asm"

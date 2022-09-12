@@ -1,8 +1,5 @@
 #importonce
 
-jump_height:
-  .byte $00
-
 //flag to allow to exit the game
 quit_game:
   .byte $00
