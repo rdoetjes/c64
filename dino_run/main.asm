@@ -9,7 +9,6 @@ main:
   jsr game
   rts
 
-
 // load all this after the basic upstart and make it easily relocatable.
 * = $2000 "Sprites"
 #import "src/assets/sprites/dino_sprite.asm"
