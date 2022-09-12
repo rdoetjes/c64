@@ -17,7 +17,7 @@ main:
 * = $3000 "Charset"
 #import "src/assets/charset/charset.asm"
 
-* = $4000 "Gamecode"
+* = $3800 "Gamecode"
 #import "src/game.asm"
 #import "src/general_game_vars.asm"         // general game variables, player or obstacle vars are located in their source files.
 #import "src/background.asm"
