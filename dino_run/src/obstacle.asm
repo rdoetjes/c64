@@ -8,7 +8,7 @@ OBSTACLCE: {
   .label SPRITE_VERN_OFFSET = $8c
 }
 
-cactusSprite:
+obstacleSprites:
   lda #$8e
   sta VIC.SCREEN + $03f9   //load sprite offset
   lda VIC.SPRITE_ENABLE
@@ -28,7 +28,7 @@ cactusSprite:
   sta VIC.SPRITE_1_COLOR  //set sprite color to green
   rts
 
-  moveObstacle1:
+  moveObstacles:
     lda VIC.SPRITE_1_X
     sbc scroll_speed_layer + 1
     bcc !+

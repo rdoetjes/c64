@@ -47,7 +47,7 @@ setup:
   jsr setupSid4Noise
   jsr setupCharset
   jsr dinoSprite
-  jsr cactusSprite
+  jsr obstacleSprites
   jsr createLandscape
 
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff

@@ -3,6 +3,7 @@
 
 // raster interrupt 1 that counts the frames
 gameIrq:
+  inc $d020
   pushall()
   inc frame_counter
   lda frame_counter
@@ -10,6 +11,7 @@ gameIrq:
   jsr gameCycle
   popall()
   asl $d019               // ack interrupt
+  dec $d020
   rti
 
 // draw the new state
@@ -22,7 +24,7 @@ gameCycle:
 
 gameLogic:
   jsr movePlayerCharacter   //move character based on joystick input
-  jsr moveObstacle1
+  jsr moveObstacles
   jsr scrollBgLogic
   rts
 

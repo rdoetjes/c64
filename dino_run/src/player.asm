@@ -81,13 +81,17 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   sta playerState
   rts
   !:
+  
   //load jump anim cycle 4 frames
   lda #PLAYER.SPRITE_JUMP_OFFSET
   sta VIC.SPRITE_0_PTR
   
+  //set the current state of the player
   lda #STATE.JUMP_UP
   sta dino_animation_state
+  // play the sound
   jsr jumpSound
+
   rts
 
 jump_down:
@@ -98,8 +102,9 @@ jump_down:
   inc VIC.SPRITE_0_Y
   rts
   !: 
+  // change state back to normal walk state after we landed the jump
   lda #STATE.WALK
-  sta playerState       // change state back to normal walk
+  sta playerState       
   sta dino_animation_state
 
   // load walk animation sprite
@@ -133,11 +138,12 @@ dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't nee
   lda #PLAYER.SPRITE_DUG_OFFSET
   sta VIC.SPRITE_0_PTR
 
-  //copy4Sprites(dino_d_src, dino_0_4)
+  // save the current animation state for the player to DUG
   lda #STATE.DUG
   sta dino_animation_state
   rts
 
+// move the player sprite left
 left:
   lda #PLAYER.MAX_LEFT_POS
   cmp VIC.SPRITE_0_X
@@ -157,6 +163,7 @@ left:
   !:
   rts
 
+// move the player sprite right
 right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
   lda #PLAYER.MAX_RIGHT_POS
   cmp VIC.SPRITE_0_X
@@ -177,7 +184,8 @@ right:         // move the player sprite to the right but not use the high bit, 
   rts
 
 
-// play the 4 step player animation sprites
+// play the 4 step player animation sprites. Each player sprite has 4 animation frames
+// this is done by using the offsets set in the in the state change code above
 dinoAnim:
   inc dino_anim_count
   lda dino_anim_count
