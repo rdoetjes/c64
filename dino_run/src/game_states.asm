@@ -7,4 +7,5 @@ STATE: {
   .label JUMP_DOWN = $03
   .label MOVE_LEFT = $04
   .label MOVE_RIGHT = $05
+  .label GAMEOVER = $ff
 }

@@ -200,6 +200,16 @@ dinoAnim:
     sta VIC.SPRITE_0_PTR
     rts
 
+checkCollision:
+  lda VIC.SPRITE_COLLISION
+  and #$01
+  bne !+
+  rts
+!:  
+  lda STATE.GAMEOVER
+  sta playerState
+  rts
+
 jumpSound:
   lda #$ff
   sta SID.VOICE1_SUSTAIN_RELEASE
