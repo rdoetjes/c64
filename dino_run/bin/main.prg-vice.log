@@ -12,7 +12,7 @@ Empathic Qubit, Roberto Muscedere, June Tate-Gans, Pablo Roldan.
 This is free software with ABSOLUTELY NO WARRANTY.
 See the "About VICE" command for more info.
  
-random seed was: 0x6320cf92
+random seed was: 0x6320e038
 command line was: /Applications/vice-arm64-gtk3-3.6.1/VICE.app/Contents/Resources/bin/x64sc -logfile main.prg-vice.log main.prg
 Loading system file `/Applications/vice-arm64-gtk3-3.6.1/VICE.app/Contents/Resources/bin/../share/vice/C64/kernal'.
 Loading system file `/Applications/vice-arm64-gtk3-3.6.1/VICE.app/Contents/Resources/bin/../share/vice/C64/basic'.
@@ -62,7 +62,7 @@ CART: '/Users/rdoetjes/develop/c64/dino_run/bin/main.prg' is not a valid CRT fil
 AUTOSTART: Loading PRG file `main.prg' with autostart disk image.
 AUTOSTART: Resetting drive 8
 AUTOSTART: Resetting the machine to autostart 'MAIN'
-VIC-II: VSP Bug: safe channels are: 0123457. Emulation of memory corruption is disabled.
+VIC-II: VSP Bug: safe channels are: 012467. Emulation of memory corruption is disabled.
 AUTOSTART: Turning Warp mode on.
 AUTOSTART: `main.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).
@@ -91,8 +91,8 @@ AUTOSTART: Restoring FSDeviceLongNames to 0.
 AUTOSTART: Done.
 Sync reset
 Initiating render thread 0 shutdown
-Joining render thread 0 ...
 Render thread shutdown
+Joining render thread 0 ...
 Joined render thread 0.
 
 Resources with non default values:
@@ -119,6 +119,6 @@ VICE thread initiating shutdown
 VICE thread is exiting
 VICE thread has been joined.
 Writing configuration file `/Users/rdoetjes/.config/vice/vicerc'.
-VIC-II: VSP Bug: safe channels are: 1234. Emulation of memory corruption is disabled.
+VIC-II: VSP Bug: safe channels are: 04567. Emulation of memory corruption is disabled.
 Sound: Closing device `coreaudio'
 AudioComponentInstanceDispose
