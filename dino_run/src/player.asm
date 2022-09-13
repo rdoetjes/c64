@@ -11,23 +11,23 @@ PLAYER: {
 dinoSprite:
   lda #$80
   sta VIC.SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
-  lda $d015
+  lda VIC.SPRITE_ENABLE
   ora #1  
-  sta $d015   // enable sprite 1
+  sta VIC.SPRITE_ENABLE   // enable sprite 1
 
-  lda #$80
-  sta $d000
+  lda #$80                //set initial sprite position
+  sta VIC.SPRITE_0_X
   lda #$e0
-  sta $d001   //set initial sprite position
+  sta VIC.SPRITE_0_Y   
 
   lda #$05     
-  sta $d027   //set sprite color to green
+  sta VIC.SPRITE_0_COLOR   //set sprite color to green
   rts
 
 //takes care of loading the right animation cycle and moving the player sprite
 movePlayerCharacter:  
   lda playerState
-  sta $0401
+  sta VIC.SCREEN + 1
 
   cmp #STATE.WALK             //state jump coming down 
   beq !walk+
@@ -121,39 +121,39 @@ dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't nee
 
 left:
   lda #PLAYER.MAX_LEFT_POS
-  cmp $d000
+  cmp VIC.SPRITE_0_X
   bne !+
   rts
   !:
   sec
-  lda $d000
+  lda VIC.SPRITE_0_X
   sbc scroll_speed_layer+2
   cmp #PLAYER.MAX_LEFT_POS
   bcc !+
-  sta $d000
+  sta VIC.SPRITE_0_X
   jmp !++
   !:
   lda #PLAYER.MAX_LEFT_POS
-  sta $d000
+  sta VIC.SPRITE_0_X
   !:
   rts
 
 right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
   lda #PLAYER.MAX_RIGHT_POS
-  cmp $d000
+  cmp VIC.SPRITE_0_X
   bne !+
   rts
   !:
   clc
-  lda $d000
+  lda VIC.SPRITE_0_X
   adc scroll_speed_layer+2
   cmp #PLAYER.MAX_RIGHT_POS
   bcs !+
-  sta $d000
+  sta VIC.SPRITE_0_X
   jmp !++
   !:
   lda #PLAYER.MAX_RIGHT_POS
-  sta $d000
+  sta VIC.SPRITE_0_X
   !:
   rts
 
@@ -168,35 +168,35 @@ dinoAnim:
   !move_sprite:
     lda #$00
     sta dino_anim_count
-    lda $07f8
+    lda VIC.SPRITE_0_PTR
     cmp #$83
     beq !reset_sprite+
-    inc $07f8
+    inc VIC.SPRITE_0_PTR
     rts
   !reset_sprite:
     lda #$80
-    sta $07f8
+    sta VIC.SPRITE_0_PTR
     rts
 
 jumpSound:
   lda #$ff
-  sta $d406
+  sta SID.VOICE1_SUSTAIN_RELEASE
   
   lda #$10
-  sta $d400
-  sta $d401
+  sta SID.VOICE2_FREQ_LB
+  sta SID.VOICE2_FREQ_HB
   
-  lda #%10100001
-  sta $d404
+  lda #%10100001  //noise plus saw tooth and gate on
+  sta SID.VOICE1_CTRL
 
   lda #$f8
-  sta $d406
+  sta SID.VOICE1_SUSTAIN_RELEASE
   
   lda #$0f
-  sta $d418 
+  sta SID.VOLUME_FILTER
 
   lda #%00100000
-  sta $d404
+  sta SID.VOICE1_CTRL
   rts
 
   // dino sprite counter, each dino sprite has 4 animation steps (0-3)

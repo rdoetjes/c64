@@ -57,24 +57,24 @@ HardScroll:
   createLandscape:
   ldx #0
   !:
-    lda $d41b
+    lda SID.OSC3_RO
     and #15
     adc #64
     sta VIC.SCREEN + (BACKGROUND.LINE * 40), x
     lda #9
-    sta $d800 + (BACKGROUND.LINE * 40), x
+    sta VIC.COLOR_RAM + (BACKGROUND.LINE * 40), x
     //burn nops to get to new random number (SID chip refreshed every 16 cycles)
     nop
     nop
     nop
     nop
     nop
-    lda $d41b
+    lda SID.OSC3_RO
     and #15
     adc #80
     sta VIC.SCREEN + ((BACKGROUND.LINE+1) * 40), x
     lda #9
-    sta $d800 + ((BACKGROUND.LINE +1) * 40), x
+    sta VIC.COLOR_RAM + ((BACKGROUND.LINE +1) * 40), x
     inx
     cpx #40
     bne !-
