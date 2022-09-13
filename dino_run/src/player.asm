@@ -5,17 +5,21 @@
 PLAYER: {
   .label MAX_LEFT_POS = 40
   .label MAX_RIGHT_POS = 230
+
+  .label SPRITE_WALK_OFFSET = $80
+  .label SPRITE_DUG_OFFSET = $84
+  .label SPRITE_JUMP_OFFSET = $88
 }
 
 
 dinoSprite:
-  lda #$80
+  lda #PLAYER.SPRITE_WALK_OFFSET 
   sta VIC.SPRITE_0_PTR   //load sprite offset (sprites always start 3f8 after the sceen)
   lda VIC.SPRITE_ENABLE
   ora #1  
   sta VIC.SPRITE_ENABLE   // enable sprite 1
 
-  lda #$80                //set initial sprite position
+  lda PLAYER.SPRITE_WALK_OFFSET                //set initial sprite position
   sta VIC.SPRITE_0_X
   lda #$e0
   sta VIC.SPRITE_0_Y   
@@ -70,14 +74,17 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   cmp #25
   bcs !+
   inc jump_height
-  dec $d001
+  dec VIC.SPRITE_0_Y
   rts
   !: 
   lda #STATE.JUMP_DOWN
   sta playerState
   rts
   !:
-  copy4Sprites(dino_j_src, dino_0_4)
+  //load jump anim cycle 4 frames
+  lda #PLAYER.SPRITE_JUMP_OFFSET
+  sta VIC.SPRITE_0_PTR
+  
   lda #STATE.JUMP_UP
   sta dino_animation_state
   jsr jumpSound
@@ -88,13 +95,16 @@ jump_down:
   cmp #$00
   beq !+
   dec jump_height
-  inc $d001
+  inc VIC.SPRITE_0_Y
   rts
   !: 
   lda #STATE.WALK
   sta playerState       // change state back to normal walk
   sta dino_animation_state
-  copy4Sprites(dino_w_src, dino_0_4)
+
+  // load walk animation sprite
+  lda #PLAYER.SPRITE_WALK_OFFSET 
+  sta VIC.SPRITE_0_PTR
   rts
 
 walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't need to hence the playerState
@@ -103,7 +113,11 @@ walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't 
   bne !+
   rts
   !:
-  copy4Sprites(dino_w_src, dino_0_4)
+  
+  // set to walk cycle anim (4 frames)
+  lda #PLAYER.SPRITE_WALK_OFFSET
+  sta VIC.SPRITE_0_PTR
+
   lda #STATE.WALK
   sta dino_animation_state
   rts
@@ -114,7 +128,12 @@ dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't nee
   bne !+
   rts
   !:
-  copy4Sprites(dino_d_src, dino_0_4)
+
+  // set to walk cycle anim (4 frames)
+  lda #PLAYER.SPRITE_DUG_OFFSET
+  sta VIC.SPRITE_0_PTR
+
+  //copy4Sprites(dino_d_src, dino_0_4)
   lda #STATE.DUG
   sta dino_animation_state
   rts
@@ -168,13 +187,18 @@ dinoAnim:
   !move_sprite:
     lda #$00
     sta dino_anim_count
+
+    // check if we had the 4 frames of anim, the rest
     lda VIC.SPRITE_0_PTR
-    cmp #$83
+    and #$03
+    cmp #$03
     beq !reset_sprite+
+
     inc VIC.SPRITE_0_PTR
     rts
   !reset_sprite:
-    lda #$80
+    lda VIC.SPRITE_0_PTR
+    and #%11111100
     sta VIC.SPRITE_0_PTR
     rts
 

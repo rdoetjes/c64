@@ -47,8 +47,7 @@ setup:
   jsr setupSid4Noise
   jsr setupCharset
   jsr dinoSprite
-  jsr cactusSprite
-  copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
+  //jsr cactusSprite
   jsr createLandscape
 
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff

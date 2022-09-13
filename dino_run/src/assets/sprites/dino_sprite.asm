@@ -1,8 +1,8 @@
-dino_0_4:
-	.fill (64 * 4),0
+// dino_0_4:
+// 	.fill (64 * 4),0
 
-enemy_0_3:
-	.fill (64 * 4),0
+// enemy_0_3:
+// 	.fill (64 * 4),0
 
 dino_w_src:
 	.byte $00, $03, $F8

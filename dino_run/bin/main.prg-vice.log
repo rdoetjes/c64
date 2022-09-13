@@ -12,7 +12,7 @@ Empathic Qubit, Roberto Muscedere, June Tate-Gans, Pablo Roldan.
 This is free software with ABSOLUTELY NO WARRANTY.
 See the "About VICE" command for more info.
  
-random seed was: 0x63207c92
+random seed was: 0x63208224
 command line was: /Applications/vice-arm64-gtk3-3.6.1/VICE.app/Contents/Resources/bin/x64sc -logfile main.prg-vice.log main.prg
 Loading system file `/Applications/vice-arm64-gtk3-3.6.1/VICE.app/Contents/Resources/bin/../share/vice/C64/kernal'.
 Loading system file `/Applications/vice-arm64-gtk3-3.6.1/VICE.app/Contents/Resources/bin/../share/vice/C64/basic'.
@@ -62,7 +62,7 @@ CART: '/Users/rdoetjes/develop/c64/dino_run/bin/main.prg' is not a valid CRT fil
 AUTOSTART: Loading PRG file `main.prg' with autostart disk image.
 AUTOSTART: Resetting drive 8
 AUTOSTART: Resetting the machine to autostart 'MAIN'
-VIC-II: VSP Bug: safe channels are: 02357. Emulation of memory corruption is disabled.
+VIC-II: VSP Bug: safe channels are: 01. Emulation of memory corruption is disabled.
 AUTOSTART: Turning Warp mode on.
 AUTOSTART: `main.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).
@@ -78,7 +78,7 @@ reSID: MOS8580, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
 Sync reset
 Unit 8: RESET.
 AUTOSTART: Loading program 'MAIN'
-AUTOSTART: Entered ROM at $e5cd
+AUTOSTART: Entered ROM at $e5d1
 AUTOSTART: Searching for ...
 AUTOSTART: Loading
 AUTOSTART: Entered ROM at $ea21
@@ -92,6 +92,7 @@ AUTOSTART: Done.
 Sync reset
 Initiating render thread 0 shutdown
 Joining render thread 0 ...
+Render thread shutdown
 Joined render thread 0.
 
 Resources with non default values:
@@ -118,6 +119,6 @@ VICE thread initiating shutdown
 VICE thread is exiting
 VICE thread has been joined.
 Writing configuration file `/Users/rdoetjes/.config/vice/vicerc'.
-VIC-II: VSP Bug: safe channels are: 45. Emulation of memory corruption is disabled.
+VIC-II: VSP Bug: safe channels are: 2345. Emulation of memory corruption is disabled.
 Sound: Closing device `coreaudio'
 AudioComponentInstanceDispose
