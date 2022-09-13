@@ -39,7 +39,7 @@ setupCharset:
 setup:
   sei                         // disable interrupts
   
-  lda #$35                    // disabel kernal and basic
+  lda #$35                    // disable kernal and basic
 	sta $01
 
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
