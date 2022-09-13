@@ -3,7 +3,6 @@
 
 // raster interrupt 1 that counts the frames
 gameIrq:
-  inc $d020
   pushall()
   inc frame_counter
   lda frame_counter
@@ -11,7 +10,6 @@ gameIrq:
   jsr gameCycle
   popall()
   asl $d019               // ack interrupt
-  dec $d020
   rti
 
 // draw the new state
@@ -31,11 +29,6 @@ gameLogic:
 draw:
   jsr Background
   jsr dinoAnim            // change the dino sprites depending on the joystick input
-  rts
-
-// the game logic goes here
-gameInput:
-    jsr readInput           // read the joystick input
   rts
 
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
