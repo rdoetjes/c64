@@ -22,6 +22,7 @@ gameCycle:
 
 gameLogic:
   jsr movePlayerCharacter   //move character based on joystick input
+  jsr moveObstacle1
   jsr scrollBgLogic
   rts
 

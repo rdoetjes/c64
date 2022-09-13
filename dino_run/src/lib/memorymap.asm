@@ -9,11 +9,17 @@ VIC: {
     .label COLOR_RAM = $d800
 
     .label SPRITE_ENABLE = $d015
+    .label XCOORDINATE = $d010
 
     .label SPRITE_0_PTR = SCREEN + $03f8
     .label SPRITE_0_X = $d000
     .label SPRITE_0_Y = $d001
     .label SPRITE_0_COLOR = $d027
+
+    .label SPRITE_1_PTR = SCREEN + $03f9
+    .label SPRITE_1_X = $d002
+    .label SPRITE_1_Y = $d003
+    .label SPRITE_1_COLOR = $d028
 }
 
 SID: {
