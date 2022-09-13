@@ -24,6 +24,16 @@ gameLogic:
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
+  jsr checkCollision
+  rts
+
+checkCollision:
+  lda VIC.SPRITE_COLLISION
+  and #$01
+  bne !+
+  rts
+!:  
+  inc $d020
   rts
 
 draw:
