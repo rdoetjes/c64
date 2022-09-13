@@ -3,6 +3,7 @@
 #import "macros.asm"
 #import "lib/screen.asm"
 #import "lib/memorymap.asm"
+#import "lib/system.asm"
 
 screenColor:
   lda #00
@@ -36,11 +37,8 @@ setupCharset:
   rts
 
 // sets up the screen, interrupts and the sprites
-setup:
-  sei                         // good idea before removing kernel and basic
-  
-  lda #$35                    // disable kernal and basic
-	sta $01
+setup:     
+  jsr backoutKernalAndBasic
 
   lda #$00
   jsr screenColor
@@ -54,13 +52,12 @@ setup:
   jsr createLandscape
 
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
-  ldx #$ff
+  ldx #$0a
   lda #<gameIrq               
   sta $fffe
   lda #>gameIrq
   sta $ffff
   jsr setupRasterInt
-  
-  cli
 
+  cli
   rts

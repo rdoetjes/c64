@@ -46,6 +46,8 @@ setupRasterInt:
   sta VIC.SCREEN_CR           // clear most significant bit of vicii
 
   stx VIC.RASTER_LINE         //trigger raster interrupt on 00
-  cli
+
   asl VIC.ISR                 // accept current interrupt
+  
+  cli
   rts
