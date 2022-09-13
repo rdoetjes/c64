@@ -1,14 +1,15 @@
+#import "memorymap.asm"
 #importonce
 
-//clears the screen
+//clears the VIC.SCREEN
 cls:
   ldx #250
   lda #32
 !:
-  sta SCREEN, x
-  sta SCREEN + 250, x
-  sta SCREEN + 500, x
-  sta SCREEN + 750, x
+  sta VIC.SCREEN, x
+  sta VIC.SCREEN + 250, x
+  sta VIC.SCREEN + 500, x
+  sta VIC.SCREEN + 750, x
   dex
   bne !-
   rts
@@ -17,9 +18,11 @@ cls:
 // initialize the game and setup a raster interrupt that counts the frame_counter variable, which we will poll in game loop
 //X contains the line to interrupt on
 setupRasterInt:
+  sei
+
   lda #$7f
-  sta $dc0d                   //acknowledge pending interrupts from CIA-1
-  sta $dd0e                   //acknowledge pending interrupts from CIA-2
+  sta CIA.ICR1                //acknowledge pending interrupts from CIA-1
+  sta CIA.ICR2                //acknowledge pending interrupts from CIA-2
 
   lda #<gameIrq               // setup gameIrq which is basically the game loop
   sta $fffe
@@ -27,13 +30,13 @@ setupRasterInt:
   sta $ffff
 
   lda #1
-  sta $d01a                   // enable raster interrupts
+  sta VIC.ICR                 // enable raster interrupts
 
-	lda $d011
+  lda VIC.SCREEN_CR
   and #$7f
-  sta $d011                   // clear most significant bit of vicii
+  sta VIC.SCREEN_CR           // clear most significant bit of vicii
 
-  stx $d012                   //trigger raster interrupt on 00
-
-  asl $d019                   // accept current interrupt
+  stx VIC.RASTER_LINE         //trigger raster interrupt on 00
+  cli
+  asl VIC.ISR                 // accept current interrupt
   rts

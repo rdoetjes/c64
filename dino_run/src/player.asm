@@ -1,6 +1,6 @@
-#import "game_states.asm"
 #importonce
-
+#import "game_states.asm"
+#import "lib/memorymap.asm"
 
 PLAYER: {
   .label MAX_LEFT_POS = 40
@@ -10,7 +10,7 @@ PLAYER: {
 
 dinoSprite:
   lda #$80
-  sta SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
+  sta VIC.SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
   lda $d015
   ora #1  
   sta $d015   // enable sprite 1

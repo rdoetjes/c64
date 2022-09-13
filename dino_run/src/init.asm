@@ -2,6 +2,7 @@
 
 #import "macros.asm"
 #import "lib/screen.asm"
+#import "lib/memorymap.asm"
 
 screenColor:
   lda #00
@@ -12,10 +13,10 @@ screenColor:
 
 setupSid4Noise:                 
   lda #$ff                      // load a with 255, which is highest frequence when put in, voice lb and voice hb       
-  sta SID_VOICE3_LB             // set frequence in frequency low byte to 255 (highest frequence)
-  sta SID_VOICE3_LB+1           // set frequence in frequency low byte to 255 (highest frequence)
-  lda #SID_WAV_NOISE            // load a wuth $80 (128) which is noise wave when store in SID_VOICE3_CTRL
-  sta SID_VOICE3_CTRL           // set voice 3 control register to play a noise wave
+  sta SID.VOICE3_LB             // set frequence in frequency low byte to 255 (highest frequence)
+  sta SID.VOICE3_HB             // set frequence in frequency low byte to 255 (highest frequence)
+  lda #SID.WAV_NOISE            // load a wuth $80 (128) which is noise wave when store in SID_VOICE3_CTRL
+  sta SID.VOICE3_CTRL           // set voice 3 control register to play a noise wave
   rts
 
 setupCharset:

@@ -1,8 +1,9 @@
 #importonce
+#import "lib/memorymap.asm"
 
 cactusSprite:
   lda #$81
-  sta SCREEN + $03f9   //load sprite offset
+  sta VIC.SCREEN + $03f9   //load sprite offset
   lda $d015
   ora #2  
   sta $d015   // enable sprite 2

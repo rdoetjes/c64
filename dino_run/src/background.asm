@@ -1,5 +1,7 @@
 #importonce
 
+#import "lib/memorymap.asm"
+
 BACKGROUND: {
   .label LINE = 23
 }
@@ -35,21 +37,21 @@ Background:
 HardScroll:
   ldx #1
   !:
-  lda SCREEN + (BACKGROUND.LINE * 40), x
-  sta SCREEN + (BACKGROUND.LINE * 40) - 1, x
-  lda SCREEN + ((BACKGROUND.LINE+1) * 40), x
-  sta SCREEN + ((BACKGROUND.LINE+1) * 40) - 1, x
+  lda VIC.SCREEN + (BACKGROUND.LINE * 40), x
+  sta VIC.SCREEN + (BACKGROUND.LINE * 40) - 1, x
+  lda VIC.SCREEN + ((BACKGROUND.LINE+1) * 40), x
+  sta VIC.SCREEN + ((BACKGROUND.LINE+1) * 40) - 1, x
   inx
   cpx #40 
   bne !-
-  lda SID_OSC3_RO
+  lda SID.OSC3_RO
   and #15
   adc #63
-  sta SCREEN + (BACKGROUND.LINE * 40) + 39
-  lda SID_OSC3_RO
+  sta VIC.SCREEN + (BACKGROUND.LINE * 40) + 39
+  lda SID.OSC3_RO
   and #15
   adc #79
-  sta SCREEN + ((BACKGROUND.LINE+1) * 40) + 39
+  sta VIC.SCREEN + ((BACKGROUND.LINE+1) * 40) + 39
   rts
 
   createLandscape:
@@ -58,7 +60,7 @@ HardScroll:
     lda $d41b
     and #15
     adc #64
-    sta SCREEN + (BACKGROUND.LINE * 40), x
+    sta VIC.SCREEN + (BACKGROUND.LINE * 40), x
     lda #9
     sta $d800 + (BACKGROUND.LINE * 40), x
     //burn nops to get to new random number (SID chip refreshed every 16 cycles)
@@ -70,7 +72,7 @@ HardScroll:
     lda $d41b
     and #15
     adc #80
-    sta SCREEN + ((BACKGROUND.LINE+1) * 40), x
+    sta VIC.SCREEN + ((BACKGROUND.LINE+1) * 40), x
     lda #9
     sta $d800 + ((BACKGROUND.LINE +1) * 40), x
     inx
