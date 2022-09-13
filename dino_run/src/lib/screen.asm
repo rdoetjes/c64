@@ -1,7 +1,11 @@
 #import "memorymap.asm"
 #importonce
 
-//clears the VIC.SCREEN
+// clears the VIC.SCREEN
+// Call example:
+// jsr cls
+//
+// Clobbers: A and X
 cls:
   ldx #250
   lda #32
@@ -16,18 +20,23 @@ cls:
 
 
 // initialize the game and setup a raster interrupt that counts the frame_counter variable, which we will poll in game loop
-//X contains the line to interrupt on
+// X contains the line to interrupt on
+// You need to set $fffe to low byte and $ffff to high byte of routine before calling this
+// Call example:
+//  ldx #$a0
+//  lda #<gameIrq               // setup gameIrq which is basically the game loop
+//  sta $fffe
+//  lda #>gameIrq
+//  sta $ffff
+//  jsr setupRasterInt
+//
+//Clobbers: A
 setupRasterInt:
   sei
 
   lda #$7f
   sta CIA.ICR1                //acknowledge pending interrupts from CIA-1
   sta CIA.ICR2                //acknowledge pending interrupts from CIA-2
-
-  lda #<gameIrq               // setup gameIrq which is basically the game loop
-  sta $fffe
-  lda #>gameIrq
-  sta $ffff
 
   lda #1
   sta VIC.ICR                 // enable raster interrupts

@@ -43,8 +43,11 @@ setup:
 	sta $01
 
   ldx #$a0
+  lda #<gameIrq               // setup gameIrq which is basically the game loop
+  sta $fffe
+  lda #>gameIrq
+  sta $ffff
   jsr setupRasterInt
-
 
   lda #$00
   jsr screenColor
