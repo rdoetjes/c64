@@ -65,7 +65,6 @@ movePlayerCharacter:
     jsr right
     rts
 
-
 jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
   lda #STATE.JUMP_UP
   cmp dino_animation_state
@@ -82,7 +81,7 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   rts
   !:
   
-  //load jump anim cycle 4 frames
+  // //load jump anim cycle 4 frames
   lda #PLAYER.SPRITE_JUMP_OFFSET
   sta VIC.SPRITE_0_PTR
   

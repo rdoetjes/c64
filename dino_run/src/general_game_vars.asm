@@ -13,10 +13,7 @@ frame_counter:
   .byte $00
 
 scroll_speed_layer:
-  .byte $03, $03, $03
+  .byte $03, $03, $02
 
 scroll_position_layer:
   .byte $07, $07, $07
-
-.label sfx1_ptr = $73
-.label sfx2_ptr = $75

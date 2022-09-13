@@ -28,19 +28,19 @@ obstacleSprites:
   sta VIC.SPRITE_1_COLOR  //set sprite color to green
   rts
 
-  moveObstacles:
-    lda VIC.SPRITE_1_X
-    sbc scroll_speed_layer + 1
-    bcc !+
-    sta VIC.SPRITE_1_X
-    rts
-  !:
-    lda #%11111101
-    and VIC.XCOORDINATE
-    sta VIC.XCOORDINATE
-    lda #$ff
-    sta VIC.SPRITE_1_X
-    rts
+moveObstacles:
+  lda VIC.SPRITE_1_X
+  sbc scroll_speed_layer + 2
+  bcc !+
+  sta VIC.SPRITE_1_X
+  rts
+!:
+  lda #%11111101
+  and VIC.XCOORDINATE
+  sta VIC.XCOORDINATE
+  lda #$ff
+  sta VIC.SPRITE_1_X
+  rts
 
 // Each obstacle sprite gets a frame offset in relation
 // to the previous obstacle sprite
