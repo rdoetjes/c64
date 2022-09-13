@@ -42,8 +42,9 @@ setup:
   lda #$35                    // disabel kernal and basic
 	sta $01
 
-  ldx #$a0
-  lda #<gameIrq               // setup gameIrq which is basically the game loop
+  // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
+  ldx #$ff
+  lda #<gameIrq               
   sta $fffe
   lda #>gameIrq
   sta $ffff
