@@ -37,6 +37,8 @@ setupCharset:
 
 // sets up the screen, interrupts and the sprites
 setup:
+  sei                         // good idea before removing kernel and basic
+  
   lda #$35                    // disable kernal and basic
 	sta $01
 
@@ -58,5 +60,7 @@ setup:
   lda #>gameIrq
   sta $ffff
   jsr setupRasterInt
+  
+  cli
 
   rts
