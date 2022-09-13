@@ -1,4 +1,12 @@
+#import "game_states.asm"
 #importonce
+
+
+PLAYER: {
+  .label MAX_LEFT_POS = 40
+  .label MAX_RIGHT_POS = 230
+}
+
 
 dinoSprite:
   lda #$80
@@ -21,17 +29,17 @@ movePlayerCharacter:
   lda playerState
   sta $0401
 
-  cmp #0        //state jump coming down 
+  cmp #STATE.WALK             //state jump coming down 
   beq !walk+
-  cmp #1        //state jump coming down 
+  cmp #STATE.DUG              //state dug
   beq !dug+
-  cmp #2        //state jump up
+  cmp #STATE.JUMP_UP          //state jump up
   beq !jump_up+
-  cmp #3        //state jump coming down 
+  cmp #STATE.JUMP_DOWN        //state jump coming down 
   beq !jump_down+
-  cmp #4        //move left
+  cmp #STATE.MOVE_LEFT        //move left
   beq !left+
-  cmp #5        //move left
+  cmp #STATE.MOVE_RIGHT       //move left
   beq !right+
 
   !walk:
@@ -55,7 +63,7 @@ movePlayerCharacter:
 
 
 jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't need to hence the playerState
-  lda #$02
+  lda #STATE.JUMP_UP
   cmp dino_animation_state
   bne !++
   lda jump_height
@@ -65,12 +73,12 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   dec $d001
   rts
   !: 
-  lda #$03
+  lda #STATE.JUMP_DOWN
   sta playerState
   rts
   !:
   copy4Sprites(dino_j_src, dino_0_4)
-  lda #$02
+  lda #STATE.JUMP_UP
   sta dino_animation_state
   jsr jumpSound
   rts
@@ -83,37 +91,36 @@ jump_down:
   inc $d001
   rts
   !: 
-  lda #$00
+  lda #STATE.WALK
   sta playerState       // change state back to normal walk
-  copy4Sprites(dino_w_src, dino_0_4)
-  lda #$00
   sta dino_animation_state
+  copy4Sprites(dino_w_src, dino_0_4)
   rts
 
 walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't need to hence the playerState
-  lda #$00
+  lda #STATE.WALK
   cmp dino_animation_state
   bne !+
   rts
   !:
   copy4Sprites(dino_w_src, dino_0_4)
-  lda #$00
+  lda #STATE.WALK
   sta dino_animation_state
   rts
 
 dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't need to hence the playerState
-  lda #$01
+  lda #STATE.DUG
   cmp dino_animation_state
   bne !+
   rts
   !:
   copy4Sprites(dino_d_src, dino_0_4)
-  lda #$01
+  lda #STATE.DUG
   sta dino_animation_state
   rts
 
 left:
-  lda #30
+  lda #PLAYER.MAX_LEFT_POS
   cmp $d000
   bne !+
   rts
@@ -121,18 +128,18 @@ left:
   sec
   lda $d000
   sbc scroll_speed_layer+2
-  cmp #MAX_LEFT_POS
+  cmp #PLAYER.MAX_LEFT_POS
   bcc !+
   sta $d000
   jmp !++
   !:
-  lda #MAX_LEFT_POS
+  lda #PLAYER.MAX_LEFT_POS
   sta $d000
   !:
   rts
 
 right:         // move the player sprite to the right but not use the high bit, we don't want the player to be too close to the spwaning enemy
-  lda #MAX_RIGHT_POS
+  lda #PLAYER.MAX_RIGHT_POS
   cmp $d000
   bne !+
   rts
@@ -140,12 +147,12 @@ right:         // move the player sprite to the right but not use the high bit, 
   clc
   lda $d000
   adc scroll_speed_layer+2
-  cmp #MAX_RIGHT_POS
+  cmp #PLAYER.MAX_RIGHT_POS
   bcs !+
   sta $d000
   jmp !++
   !:
-  lda #MAX_RIGHT_POS
+  lda #PLAYER.MAX_RIGHT_POS
   sta $d000
   !:
   rts
@@ -205,3 +212,4 @@ dino_animation_state:
 
 jump_height:
   .byte $00
+

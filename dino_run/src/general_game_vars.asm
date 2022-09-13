@@ -25,7 +25,5 @@ scroll_position_layer:
 .label SID_WAV_NOISE = $80      //128 dec, when put in voice3 control register it will select noise wave type
 .label SID_OSC3_RO = $d41b      //this will contain the amplitude value of the noise at moment of reading (because wave is noise it's random)
 .label BG_LINE = 23
-.label MAX_LEFT_POS = 40
-.label MAX_RIGHT_POS = 230
 .label sfx1_ptr = $73
 .label sfx2_ptr = $75

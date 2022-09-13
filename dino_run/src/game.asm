@@ -1,3 +1,4 @@
+  #import "src/game_states.asm"
   #import "general_game_vars.asm"
 
 // raster interrupt 1 that counts the frames
@@ -41,20 +42,20 @@ readInput:
   
   //player states are managed and handled in the player.asm code
   lda playerState
-  cmp #2
+  cmp #STATE.JUMP_UP
   beq !+  // when the player is jumping, then no input will be registered until the player is back down
   
   lda playerState
-  cmp #3
+  cmp #STATE.JUMP_DOWN
   beq !+  // when the player is jumping (falling down from jump), then no input will be registered until the player is back down
 
   //player states are managed and handled in the player.asm code
-  joystick2State($80, $00) // joystick neutral position go to walk state
-  joystick2State($01, $02) // up  go to state jump
-  joystick2State($10, $02) // button go to state jump
-  joystick2State($02, $01) // down  go to dug
-  joystick2State($04, $04) // left go to state left
-  joystick2State($08, $05) // right go to state right
+  joystick2State($80, STATE.WALK) // joystick neutral position go to walk state
+  joystick2State($01, STATE.JUMP_UP) // up  go to state jump
+  joystick2State($10, STATE.JUMP_UP) // button go to state jump
+  joystick2State($02, STATE.DUG) // down  go to dug
+  joystick2State($04, STATE.MOVE_LEFT) // left go to state left
+  joystick2State($08, STATE.MOVE_RIGHT) // right go to state right
 
   !:
   rts
