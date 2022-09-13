@@ -91,7 +91,6 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   sta dino_animation_state
   // play the sound
   jsr jumpSound
-
   rts
 
 jump_down:
