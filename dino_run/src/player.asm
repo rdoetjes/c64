@@ -82,14 +82,10 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   sta playerState
   rts
   !:
-  
-  // //load jump anim cycle 4 frames
+  sta dino_animation_state
+  //load jump anim cycle 4 frames
   lda #PLAYER.SPRITE_JUMP_OFFSET
   sta VIC.SPRITE_0_PTR
-  
-  //set the current state of the player
-  lda #STATE.JUMP_UP
-  sta dino_animation_state
   // play the sound
   jsr jumpSound
   rts
@@ -118,13 +114,10 @@ walk:          // 4 sprite (0-3) walk cycle, we prevent reloading when we don't 
   bne !+
   rts
   !:
-  
+  sta dino_animation_state
   // set to walk cycle anim (4 frames)
   lda #PLAYER.SPRITE_WALK_OFFSET
   sta VIC.SPRITE_0_PTR
-
-  lda #STATE.WALK
-  sta dino_animation_state
   rts
 
 dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't need to hence the playerState
@@ -133,14 +126,11 @@ dug:         // 4 sprite (0-3) dug cycle, we prevent reloading when we don't nee
   bne !+
   rts
   !:
-
+  // save the current animation state for the player to DUG
+  sta dino_animation_state
   // set to walk cycle anim (4 frames)
   lda #PLAYER.SPRITE_DUG_OFFSET
   sta VIC.SPRITE_0_PTR
-
-  // save the current animation state for the player to DUG
-  lda #STATE.DUG
-  sta dino_animation_state
   rts
 
 // move the player sprite left
