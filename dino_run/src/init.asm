@@ -1,18 +1,7 @@
 #importonce
 
 #import "macros.asm"
-
-cls:
-  ldx #250
-  lda #32
-!:
-  sta SCREEN, x
-  sta SCREEN + 250, x
-  sta SCREEN + 500, x
-  sta SCREEN + 750, x
-  dex
-  bne !-
-  rts
+#import "lib/screen.asm"
 
 screenColor:
   lda #00
@@ -20,29 +9,6 @@ screenColor:
   sta $d021
   rts
 
-// initialize the game and setup a raster interrupt that counts the frame_counter variable, which we will poll in game loop
-setupRasterInt:
-  lda #$7f
-  sta $dc0d                   //acknowledge pending interrupts from CIA-1
-  sta $dd0e                   //acknowledge pending interrupts from CIA-2
-
-  lda #<gameIrq               // setup gameIrq which is basically the game loop
-  sta $fffe
-  lda #>gameIrq
-  sta $ffff
-
-  lda #1
-  sta $d01a                   // enable raster interrupts
-
-	lda $d011
-  and #$7f
-  sta $d011                   // clear most significant bit of vicii
-  
-  lda #$b0
-  sta $d012                   //trigger raster interrupt on 00
-
-  asl $d019                   // accept current interrupt
-  rts
 
 setupSid4Noise:                 
   lda #$ff                      // load a with 255, which is highest frequence when put in, voice lb and voice hb       
@@ -74,6 +40,8 @@ setup:
   
   lda #$35                    // disabel kernal and basic
 	sta $01
+
+  ldx #$a0
   jsr setupRasterInt
 
 
