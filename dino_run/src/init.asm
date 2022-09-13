@@ -37,18 +37,8 @@ setupCharset:
 
 // sets up the screen, interrupts and the sprites
 setup:
-  sei                         // disable interrupts
-  
   lda #$35                    // disable kernal and basic
 	sta $01
-
-  // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
-  ldx #$ff
-  lda #<gameIrq               
-  sta $fffe
-  lda #>gameIrq
-  sta $ffff
-  jsr setupRasterInt
 
   lda #$00
   jsr screenColor
@@ -61,6 +51,12 @@ setup:
   copy4Sprites(dino_w_src, dino_0_4)  //initialize dino walk sprites (0-3)
   jsr createLandscape
 
-  cli                           // enable interrupts
+  // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
+  ldx #$ff
+  lda #<gameIrq               
+  sta $fffe
+  lda #>gameIrq
+  sta $ffff
+  jsr setupRasterInt
 
   rts
