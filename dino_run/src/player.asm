@@ -10,7 +10,7 @@ PLAYER: {
 
 dinoSprite:
   lda #$80
-  sta VIC.SCREEN + $03f8   //load sprite offset (sprites always start 3f8 after the sceen)
+  sta VIC.SPRITE_0_PTR   //load sprite offset (sprites always start 3f8 after the sceen)
   lda VIC.SPRITE_ENABLE
   ora #1  
   sta VIC.SPRITE_ENABLE   // enable sprite 1

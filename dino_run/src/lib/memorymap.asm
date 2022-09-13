@@ -10,7 +10,7 @@ VIC: {
 
     .label SPRITE_ENABLE = $d015
 
-    .label SPRITE_0_PTR = VIC.SCREEN + $03f8
+    .label SPRITE_0_PTR = SCREEN + $03f8
     .label SPRITE_0_X = $d000
     .label SPRITE_0_Y = $d001
     .label SPRITE_0_COLOR = $d027
