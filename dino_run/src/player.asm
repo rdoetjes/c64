@@ -45,6 +45,8 @@ movePlayerCharacter:
   beq !left+
   cmp #STATE.MOVE_RIGHT       //move left
   beq !right+
+  
+  rts
 
   !walk:
     jsr walk

@@ -49,4 +49,5 @@ moveObstacles:
 // and when $00 is hit the sprite will be set to the end of the
 // screen and allowed to run from right to left
 obstacles:
-    .byte $00, $00, $00, $00, $00, $00, $00  
+    .byte $00, $00, $00, $00 
+    
