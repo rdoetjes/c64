@@ -4,7 +4,6 @@
 
 // raster interrupt 1 that counts the frames
 gameIrq:
-inc $d020
   pushall()
   inc frame_counter
   lda frame_counter
@@ -13,13 +12,12 @@ inc $d020
   popall()
   asl $d019               // ack interrupt
 
-  ldx #90
+  ldx #00
   lda #<noScroll
   sta $fffe
   lda #>noScroll
   sta $ffff
   jsr setupRasterInt
-dec $d020
   rti
 
 // draw the new state
