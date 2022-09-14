@@ -264,17 +264,17 @@ drawScore:
 //sets up the logic for the whole game, but not the game state! That is done after calling this routine
 //that way we can start in game over state, and after a button press we can move to game state
 gameSetup:
-  lda #$07
-  jsr fillColor
-
-  jsr setupSid4Noise
-  
   jsr setupCharset
-  
+
   lda #$00
   jsr screenColor
 
   jsr cls
+
+  lda #$07
+  jsr fillColor
+
+  jsr setupSid4Noise
   
   jsr dinoSprite
   

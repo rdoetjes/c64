@@ -45,7 +45,6 @@ setup:
   lda #STATE.GAMEOVER
   sta playerState
 
-
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
   ldx #$ff
   lda #<gameIrq               
@@ -53,5 +52,5 @@ setup:
   lda #>gameIrq
   sta $ffff
   jsr setupRasterInt
-  cli
+  
   rts
