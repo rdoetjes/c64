@@ -7,8 +7,6 @@ BACKGROUND: {
 }
 
 scrollBgLogic:
-  lda scroll_speed_layer
-  sta $0410
   lda scroll_position_layer
   sec
   sbc scroll_speed_layer

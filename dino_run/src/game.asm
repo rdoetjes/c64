@@ -50,19 +50,22 @@ gameLogic:
 
 // increase speed at 500, 1500, 2500
 increaseSpeed:
+  lda scroll_speed_layer
+  cmp #$04
+  beq !+
+
   lda score + 1
-  cmp #$10
+  cmp #$20
   beq !match+
   rts
+
   !match:
   lda score + 2
   cmp #$00
   beq !increaseSpeed+
   rts
+
   !increaseSpeed:
-  lda scroll_speed_layer
-  cmp #$06
-  beq !+
   adc #$02
   sta scroll_speed_layer
   !:
