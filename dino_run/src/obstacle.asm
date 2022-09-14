@@ -27,7 +27,7 @@ obstacleSprites:
   lda #$05     
   sta VIC.SPRITE_1_COLOR  //set sprite color to green
 
-  lda #$8c
+  lda #$8e
   sta VIC.SCREEN + $03f9   //load sprite offset
   lda VIC.SPRITE_ENABLE
   ora #2  

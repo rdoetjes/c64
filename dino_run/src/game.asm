@@ -70,7 +70,6 @@ noScroll:
   lda #>gameIrq
   sta $ffff
   jsr setupRasterInt
-
   rti
 
 // increase the speed to 4 pixel scroll on score 2000
