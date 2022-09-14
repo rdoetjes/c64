@@ -39,6 +39,13 @@ setupCharset:
 setup:     
   jsr backoutKernalAndBasic
 
+  // draw the game and put into game over state. The state engine is processed in the game.asm
+  jsr gameSetup
+
+  lda #STATE.GAMEOVER
+  sta playerState
+
+
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
   ldx #$ff
   lda #<gameIrq               
@@ -46,11 +53,5 @@ setup:
   lda #>gameIrq
   sta $ffff
   jsr setupRasterInt
-
-  // draw the game and put into game over state. The state engine is processed in the game.asm
-  jsr gameSetup
-  lda #STATE.GAMEOVER
-  sta playerState
-
   cli
   rts
