@@ -7,31 +7,25 @@ BACKGROUND: {
 }
 
 scrollBgLogic:
-  ldx #$02
-!:
-  lda scroll_position_layer, x
+  lda scroll_speed_layer
+  sta $0410
+  lda scroll_position_layer
   sec
-  sbc scroll_speed_layer, x
+  sbc scroll_speed_layer
   bcs !+
   lda #$07
-!:
-  sta scroll_position_layer, x
-  dex
-  bpl !--
+  !:
+  sta scroll_position_layer
   rts
 
 scrollBackground:
-  ldx #$02
-!:
-  lda scroll_position_layer, x
+  lda scroll_position_layer
   cmp #$07
   bne !+
   jsr HardScroll
   lda #$07
-!:
+  !:
   sta VIC.SCREEN_CR_2
-  dex
-  bpl !-
   rts
 
 HardScroll:

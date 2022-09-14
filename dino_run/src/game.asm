@@ -51,7 +51,7 @@ gameLogic:
 // increase speed at 500, 1500, 2500
 increaseSpeed:
   lda score + 1
-  cmp #$05
+  cmp #$10
   beq !match+
   rts
   !match:
@@ -60,12 +60,11 @@ increaseSpeed:
   beq !increaseSpeed+
   rts
   !increaseSpeed:
-  inc $d020
-  lda scroll_speed_layer + 2
+  lda scroll_speed_layer
   cmp #$06
   beq !+
   adc #$02
-  sta scroll_speed_layer + 2
+  sta scroll_speed_layer
   !:
   rts
 
@@ -174,11 +173,9 @@ resetScore:
 
 resetSpeed:
   lda #$02
-  ldx #$02
-  !:
-  sta scroll_speed_layer, x
-  dex
-  bpl !-
+  sta scroll_speed_layer
+  lda #$07
+  sta scroll_position_layer
   rts 
 
 //scoring is done 1 point per frame

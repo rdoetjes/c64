@@ -15,10 +15,10 @@ frame_counter:
   .byte $00
 
 scroll_speed_layer:
-  .byte $03, $03, $01
+  .byte $01
 
 scroll_position_layer:
-  .byte $07, $07, $07
+  .byte $07
 
 gameOverFrameCountDown:
   .byte gameOverCountDown

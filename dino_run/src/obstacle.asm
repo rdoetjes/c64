@@ -37,7 +37,7 @@ obstacleSprites:
 moveObstacles:
   lda VIC.SPRITE_1_X
   sec
-  sbc scroll_speed_layer + 2
+  sbc scroll_speed_layer
   bcc !+  
   sta VIC.SPRITE_1_X
   rts

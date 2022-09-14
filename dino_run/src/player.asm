@@ -151,7 +151,7 @@ left:
   !:
   sec
   lda VIC.SPRITE_0_X
-  sbc scroll_speed_layer+2
+  sbc scroll_speed_layer
   cmp #PLAYER.MAX_LEFT_POS
   bcc !+
   sta VIC.SPRITE_0_X
@@ -171,7 +171,7 @@ right:         // move the player sprite to the right but not use the high bit, 
   !:
   clc
   lda VIC.SPRITE_0_X
-  adc scroll_speed_layer+2
+  adc scroll_speed_layer
   cmp #PLAYER.MAX_RIGHT_POS
   bcs !+
   sta VIC.SPRITE_0_X
