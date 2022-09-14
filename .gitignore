@@ -4,3 +4,4 @@ buildlog.txt
 bin/*
 bin/log*
 ../bin/*
+*.log
