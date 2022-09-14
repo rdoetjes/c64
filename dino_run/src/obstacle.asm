@@ -17,9 +17,9 @@ obstacleSprites:
 
   lda #$60
   sta VIC.SPRITE_1_X
-  lda VIC.XCOORDINATE
+  lda VIC.SPRITE_XCOORDINATE
   ora #$02
-  sta VIC.XCOORDINATE
+  sta VIC.SPRITE_XCOORDINATE
 
   lda #$e0
   sta VIC.SPRITE_1_Y   //set initial sprite position
@@ -37,8 +37,8 @@ moveObstacles:
   rts
 !:
   lda #%11111101
-  and VIC.XCOORDINATE
-  sta VIC.XCOORDINATE
+  and VIC.SPRITE_XCOORDINATE
+  //sta VIC.SPRITE_XCOORDINATE
   lda #$ff
   sta VIC.SPRITE_1_X
   rts
