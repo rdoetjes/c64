@@ -10,7 +10,7 @@ cls:
   ldx #250
   lda #32
 !:
-  sta VIC.SCREEN, x
+  sta VIC.SCREEN +   0, x
   sta VIC.SCREEN + 250, x
   sta VIC.SCREEN + 500, x
   sta VIC.SCREEN + 750, x
@@ -22,7 +22,7 @@ cls:
 fillColor:
   ldx #250
 !:
-  sta VIC.COLOR_RAM, x
+  sta VIC.COLOR_RAM +   0, x
   sta VIC.COLOR_RAM + 250, x
   sta VIC.COLOR_RAM + 500, x
   sta VIC.COLOR_RAM + 750, x
