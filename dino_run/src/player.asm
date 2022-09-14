@@ -11,7 +11,6 @@ PLAYER: {
   .label SPRITE_JUMP_OFFSET = $88
 }
 
-
 dinoSprite:
   lda #PLAYER.SPRITE_WALK_OFFSET 
   sta VIC.SPRITE_0_PTR   //load sprite offset (sprites always start 3f8 after the sceen)
@@ -26,6 +25,10 @@ dinoSprite:
 
   lda #$05     
   sta VIC.SPRITE_0_COLOR   //set sprite color to green
+  
+  // reset the jump height
+  lda #$00
+  sta jump_height
   rts
 
 //takes care of loading the right animation cycle and moving the player sprite
@@ -199,16 +202,6 @@ dinoAnim:
     and #%11111100
     sta VIC.SPRITE_0_PTR
     rts
-
-checkCollision:
-  lda VIC.SPRITE_COLLISION
-  and #$01
-  bne !+
-  rts
-!:  
-  lda STATE.GAMEOVER
-  sta playerState
-  rts
 
 jumpSound:
   lda #$ff

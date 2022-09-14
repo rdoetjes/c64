@@ -24,6 +24,10 @@ VIC: {
     .label SPRITE_COLLISION = $d01e 
 }
 
+IO: {
+    .label JOYSTICK2 = $dc00
+}
+
 SID: {
     .label VOLUME_FILTER = $d418 
     .label WAV_NOISE = $80      //128 dec, when put in voice3 control register it will select noise wave type

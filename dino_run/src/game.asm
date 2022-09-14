@@ -1,5 +1,6 @@
   #import "src/game_states.asm"
   #import "general_game_vars.asm"
+  #import "lib/memorymap.asm"
 
 // raster interrupt 1 that counts the frames
 gameIrq:
@@ -21,30 +22,80 @@ gameCycle:
   rts
 
 gameLogic:
+  lda playerState
+  cmp #STATE.GAMEOVER
+  beq !gameOver+
+  cmp #STATE.START
+  beq !gameStart+
+
+  // game loop
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
   jsr checkCollision
   rts
 
+  // game start
+  !gameStart:
+    jsr jumpSound
+    jsr gameStart
+    lda #STATE.WALK
+    sta playerState
+    rts
+  !gameOver:
+    jsr gameOver
+    rts
+
+// draws background and sprite animation of player (dino)
 draw:
   jsr Background
   jsr dinoAnim            // change the dino sprites depending on the joystick input
   rts
 
+// just print game over and press button to start
+gameOver:
+  ldx #$00
+  !:
+    lda gameOverString, x
+    beq !+
+    sta VIC.SCREEN + (12*40) + 13, x
+    inx
+    jmp !-
+  !:
+  ldx #$00
+  !:
+    lda presStartString, x
+    beq !+
+    sta VIC.SCREEN + (13*40) + 10, x
+    inx
+    jmp !-
+  !:
+  rts
+
+checkCollision:
+  lda VIC.SPRITE_COLLISION
+  and #$01
+  bne !+
+  rts
+!:  
+  inc $d020
+  lda #STATE.GAMEOVER
+  sta playerState
+  rts
+
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
 readInput:
-  lda $dc00
+  lda IO.JOYSTICK2
   sta $ff
   
   //player states are managed and handled in the player.asm code
   lda playerState
   cmp #STATE.JUMP_UP
-  beq !+  // when the player is jumping, then no input will be registered until the player is back down
-  
-  lda playerState
+  beq !+               // when the player is jumping, then no input will be registered until the player is back down
   cmp #STATE.JUMP_DOWN
-  beq !+  // when the player is jumping (falling down from jump), then no input will be registered until the player is back down
+  beq !+               // when the player is jumping (falling down from jump), then no input will be registered until the player is back down
+  cmp #STATE.GAMEOVER
+  beq !gameOver+       // when in game over state a button press will bring the game into start state
 
   //player states are managed and handled in the player.asm code
   joystick2State($80, STATE.WALK) // joystick neutral position go to walk state
@@ -53,12 +104,32 @@ readInput:
   joystick2State($02, STATE.DUG) // down  go to dug
   joystick2State($04, STATE.MOVE_LEFT) // left go to state left
   joystick2State($08, STATE.MOVE_RIGHT) // right go to state right
+  rts
 
+  // when in game over state a button press goes to start state
+  !gameOver:
+    joystick2State($10, STATE.START) // button go to state jump
   !:
   rts
+
+  gameStart:
+    jsr cls
+    jsr setupSid4Noise
+    jsr setupCharset
+    jsr dinoSprite
+    jsr obstacleSprites
+    jsr createLandscape
+    rts
 
 // the game runs from a raster interrupt, hence we just loop here.
 //Perhaps we will create an exit state so we can return... NAAH probably not.
 game:
   jmp *
   rts
+
+gameOverString: 
+  .text "game over"
+  .byte $00
+presStartString: 
+  .text "button to start"
+  .byte $00

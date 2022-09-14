@@ -11,7 +11,6 @@ screenColor:
   sta $d021
   rts
 
-
 setupSid4Noise:                 
   lda #$ff                      // load a with 255, which is highest frequence when put in, voice lb and voice hb       
   sta SID.VOICE3_FREQ_LB             // set frequence in frequency low byte to 255 (highest frequence)
@@ -43,13 +42,6 @@ setup:
   lda #$00
   jsr screenColor
 
-  jsr cls
-  jsr setupSid4Noise
-  jsr setupCharset
-  jsr dinoSprite
-  jsr obstacleSprites
-  jsr createLandscape
-
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
   ldx #$0a
   lda #<gameIrq               
@@ -57,6 +49,11 @@ setup:
   lda #>gameIrq
   sta $ffff
   jsr setupRasterInt
+
+  // draw the game and put into game over state. The state engine is processed in the game.asm
+  jsr gameStart
+  lda #STATE.GAMEOVER
+  sta playerState
 
   cli
   rts

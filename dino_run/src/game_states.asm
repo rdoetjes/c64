@@ -8,4 +8,5 @@ STATE: {
   .label MOVE_LEFT = $04
   .label MOVE_RIGHT = $05
   .label GAMEOVER = $ff
+  .label START = $fe
 }
