@@ -42,14 +42,21 @@ gameLogic:
     rts
 
   !gameOver:
+    // we need to show the final score as we don't draw the score each frame
+    jsr drawScore
     jsr gameOver
     rts
 
 // draws background and sprite animation of player (dino)
 draw:
-  jsr drawScore
   jsr scrollBackground
   jsr dinoAnim            // change the dino sprites depending on the joystick input
+  lda frame_counter
+  and #$07
+  beq !drawScore+
+  rts
+  !drawScore:
+  jsr drawScore
   rts
 
 // just print game over and press button to start
@@ -140,7 +147,7 @@ resetScore:
   !:
     sta score, x
     dex
-    bne !-
+    bpl !-
   rts
 //scoring is done 1 point per frame
 incScore:
@@ -165,7 +172,9 @@ incScore:
 drawScore:
   ldx #$00
   ldy #$00
+  
   !:
+  //top digit bcd
   lda score, x
   and #$f0
   lsr
@@ -174,12 +183,17 @@ drawScore:
   lsr
   ora #$30
   sta VIC.SCREEN + (5 * 40 ) + 15, y
+
   lda score, x
-  and #$04
+  and #$0f
   ora #$30
   sta VIC.SCREEN + (5 * 40 ) + 16, y
+
+  // y offset for screen print
   iny
   iny
+
+  // check if we printed all 3 digits
   inx
   cpx #$03
   bne !-
