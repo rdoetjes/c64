@@ -94,6 +94,8 @@ increaseSpeed:
   lda scroll_speed_layer
   adc #$02
   sta scroll_speed_layer
+  lda #$07
+  sta scroll_position_layer
   !:
   rts
 
