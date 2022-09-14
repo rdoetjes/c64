@@ -39,9 +39,6 @@ setupCharset:
 setup:     
   jsr backoutKernalAndBasic
 
-  lda #$00
-  jsr screenColor
-
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
   ldx #$ff
   lda #<gameIrq               
