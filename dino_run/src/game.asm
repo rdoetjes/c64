@@ -72,13 +72,6 @@ gameOver:
 
 // simple sprite collision, which works since both player and obstacles are sprites
 checkCollision:
-  lda playerState
-  cmp #STATE.START
-  beq !++
-  cmp #STATE.GAMEOVER
-  beq !++
-  
-  // check collision when not in start and game over state
   lda VIC.SPRITE_COLLISION
   and #$01
   bne !+
@@ -86,7 +79,6 @@ checkCollision:
 !:  
   lda #STATE.GAMEOVER
   sta playerState
-!:
   rts
 
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
@@ -134,15 +126,6 @@ gameSetup:
 gameStart:
   jsr gameSetup
   jsr jumpSound
-
-  // wait a bit before starting
-  ldx #255
-  !:
-  lda #00
-  cmp VIC.RASTER_LINE
-  bne *-3
-  dex
-  bne !-
 
   lda #STATE.WALK
   sta playerState

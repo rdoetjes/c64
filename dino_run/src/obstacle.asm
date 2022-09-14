@@ -12,8 +12,8 @@ obstacleSprites:
   lda #$8e
   sta VIC.SCREEN + $03f9   //load sprite offset
   lda VIC.SPRITE_ENABLE
-  ora #2  
-  sta VIC.SPRITE_ENABLE   // enable sprite 2
+  and #%11111101  
+  sta VIC.SPRITE_ENABLE   // disable sprite 2
 
   lda #$60
   sta VIC.SPRITE_1_X
@@ -26,6 +26,12 @@ obstacleSprites:
 
   lda #$05     
   sta VIC.SPRITE_1_COLOR  //set sprite color to green
+
+  lda #$8e
+  sta VIC.SCREEN + $03f9   //load sprite offset
+  lda VIC.SPRITE_ENABLE
+  ora #2  
+  sta VIC.SPRITE_ENABLE   // enable sprite 2
   rts
 
 moveObstacles:

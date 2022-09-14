@@ -12,23 +12,28 @@ PLAYER: {
 }
 
 dinoSprite:
-  lda #PLAYER.SPRITE_WALK_OFFSET 
-  sta VIC.SPRITE_0_PTR   //load sprite offset (sprites always start 3f8 after the sceen)
   lda VIC.SPRITE_ENABLE
-  ora #1  
-  sta VIC.SPRITE_ENABLE   // enable sprite 1
+  and #%11111110  
+  sta VIC.SPRITE_ENABLE   // disable sprite 1
 
   lda PLAYER.SPRITE_WALK_OFFSET                //set initial sprite position
+  lda #PLAYER.MAX_LEFT_POS
   sta VIC.SPRITE_0_X
   lda #$e0
   sta VIC.SPRITE_0_Y   
 
   lda #$05     
   sta VIC.SPRITE_0_COLOR   //set sprite color to green
-  
+
   // reset the jump height
   lda #$00
   sta jump_height
+
+  lda #PLAYER.SPRITE_WALK_OFFSET 
+  sta VIC.SPRITE_0_PTR   //load sprite offset (sprites always start 3f8 after the sceen)
+  lda VIC.SPRITE_ENABLE
+  ora #1  
+  sta VIC.SPRITE_ENABLE   // enable sprite 1
   rts
 
 //takes care of loading the right animation cycle and moving the player sprite
