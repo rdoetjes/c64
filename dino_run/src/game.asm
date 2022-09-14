@@ -128,7 +128,7 @@ pressButtonStart:
   !:
     lda presStartString, x
     beq !+
-    sta VIC.SCREEN + (13*40) + 10, x
+    sta VIC.SCREEN + (14*40) + 10, x
     inx
     jmp !-
   !:
