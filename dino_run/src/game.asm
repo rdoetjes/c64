@@ -37,21 +37,9 @@ gameLogic:
 
   // game start
   !gameStart:
-    jsr jumpSound
     jsr gameStart
-    
-    // wait for at least one screen before changing the state redraw
-    lda #$ff
-    cmp VIC.RASTER_LINE
-    bne *-3
-
-    lda #$ff
-    cmp VIC.RASTER_LINE
-    bne *-3
-
-    lda #STATE.WALK
-    sta playerState
     rts
+
   !gameOver:
     jsr gameOver
     rts
@@ -100,6 +88,8 @@ readInput:
   
   //player states are managed and handled in the player.asm code
   lda playerState
+  cmp #STATE.START
+  beq !+     
   cmp #STATE.JUMP_UP
   beq !+               // when the player is jumping, then no input will be registered until the player is back down
   cmp #STATE.JUMP_DOWN
@@ -124,13 +114,30 @@ readInput:
 
 //sets up the whole game, but not the game state! That is done after calling this routine
 //that way we can start in game over state, and after a button press we can move to game state
-gameStart:
+gameSetup:
   jsr cls
   jsr setupSid4Noise
   jsr setupCharset
   jsr dinoSprite
   jsr obstacleSprites
   jsr createLandscape
+  rts
+
+gameStart:
+  jsr gameSetup
+  jsr jumpSound
+
+  // wait a bit before starting
+  ldx #5
+  !:
+  lda #00
+  cmp VIC.RASTER_LINE
+  bne *-3
+  dex
+  bne !-
+
+  lda #STATE.WALK
+  sta playerState
   rts
 
 // the game runs from a raster interrupt, hence we just loop here.

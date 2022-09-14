@@ -38,7 +38,7 @@ moveObstacles:
 !:
   lda #%11111101
   and VIC.SPRITE_XCOORDINATE
-  //sta VIC.SPRITE_XCOORDINATE
+  sta VIC.SPRITE_XCOORDINATE
   lda #$ff
   sta VIC.SPRITE_1_X
   rts

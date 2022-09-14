@@ -51,7 +51,7 @@ setup:
   jsr setupRasterInt
 
   // draw the game and put into game over state. The state engine is processed in the game.asm
-  jsr gameStart
+  jsr gameSetup
   lda #STATE.GAMEOVER
   sta playerState
 
