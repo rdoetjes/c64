@@ -8,7 +8,7 @@ quit_game:
 
 // score in BCD
 score:
-  .byte $00, $00, $00, $00, $00
+  .byte $00, $00, $00
 
 // frame counter
 frame_counter:

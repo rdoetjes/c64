@@ -18,7 +18,7 @@ gameCycle:
   jsr readInput           // process the input from the user
   jsr gameLogic           // collision detection 
   jsr draw                // draw bg and user and enemy
-!:
+  !:
   rts
 
 gameLogic:
@@ -29,6 +29,7 @@ gameLogic:
   beq !gameStart+
 
   // game loop
+  jsr incScore
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
@@ -46,6 +47,7 @@ gameLogic:
 
 // draws background and sprite animation of player (dino)
 draw:
+  jsr drawScore
   jsr scrollBackground
   jsr dinoAnim            // change the dino sprites depending on the joystick input
   rts
@@ -79,7 +81,7 @@ checkCollision:
   and #$01
   bne !+
   rts
-!:
+  !:
   lda #gameOverCountDown
   sta gameOverFrameCountDown
 
@@ -131,7 +133,60 @@ readInput:
   !:
   rts
 
-//sets up the whole game, but not the game state! That is done after calling this routine
+// set the score back to 000000
+resetScore:
+  lda #$00
+  ldx #$02
+  !:
+    sta score, x
+    dex
+    bne !-
+  rts
+//scoring is done 1 point per frame
+incScore:
+  sed
+
+  clc
+  lda score + 2
+  adc #$01
+  sta score + 2
+
+  lda score + 1
+  adc #$00
+  sta score + 1
+
+  lda score + 0
+  adc #$00
+  sta score + 0
+
+  cld
+  rts
+
+drawScore:
+  ldx #$00
+  ldy #$00
+  !:
+  lda score, x
+  and #$f0
+  lsr
+  lsr
+  lsr
+  lsr
+  ora #$30
+  sta VIC.SCREEN + (5 * 40 ) + 15, y
+  lda score, x
+  and #$04
+  ora #$30
+  sta VIC.SCREEN + (5 * 40 ) + 16, y
+  iny
+  iny
+  inx
+  cpx #$03
+  bne !-
+  rts
+
+
+//sets up the logic for the whole game, but not the game state! That is done after calling this routine
 //that way we can start in game over state, and after a button press we can move to game state
 gameSetup:
   jsr cls
@@ -140,8 +195,9 @@ gameSetup:
   jsr dinoSprite
   jsr obstacleSprites
   jsr createLandscape
+  jsr resetScore
   rts
-
+// sets up the system for the game
 gameStart:
   jsr gameSetup
   jsr jumpSound
