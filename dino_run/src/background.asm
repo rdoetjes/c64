@@ -20,7 +20,7 @@ scrollBgLogic:
   bpl !--
   rts
 
-Background:
+scrollBackground:
   ldx #$02
 !:
   lda scroll_position_layer, x
@@ -29,7 +29,7 @@ Background:
   jsr HardScroll
   lda #$07
 !:
-  sta $d016
+  sta VIC.SCREEN_CR_2
   dex
   bpl !-
   rts

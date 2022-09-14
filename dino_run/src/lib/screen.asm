@@ -41,9 +41,9 @@ setupRasterInt:
   lda #1
   sta VIC.ICR                 // enable raster interrupts
 
-  lda VIC.SCREEN_CR
+  lda VIC.SCREEN_CR_1
   and #$7f
-  sta VIC.SCREEN_CR           // clear most significant bit of vicii
+  sta VIC.SCREEN_CR_1           // clear most significant bit of vicii
 
   stx VIC.RASTER_LINE         //trigger raster interrupt on 00
 

@@ -39,6 +39,16 @@ gameLogic:
   !gameStart:
     jsr jumpSound
     jsr gameStart
+    
+    // wait for at least one screen before changing the state redraw
+    lda #$ff
+    cmp VIC.RASTER_LINE
+    bne *-3
+
+    lda #$ff
+    cmp VIC.RASTER_LINE
+    bne *-3
+
     lda #STATE.WALK
     sta playerState
     rts
@@ -48,7 +58,7 @@ gameLogic:
 
 // draws background and sprite animation of player (dino)
 draw:
-  jsr Background
+  jsr scrollBackground
   jsr dinoAnim            // change the dino sprites depending on the joystick input
   rts
 
@@ -72,13 +82,13 @@ gameOver:
   !:
   rts
 
+// simple sprite collision, which works since both player and obstacles are sprites
 checkCollision:
   lda VIC.SPRITE_COLLISION
   and #$01
   bne !+
   rts
 !:  
-  inc $d020
   lda #STATE.GAMEOVER
   sta playerState
   rts

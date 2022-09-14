@@ -3,14 +3,15 @@
 VIC: {
     .label SCREEN = $0400
     .label ICR = $d01a
-    .label SCREEN_CR = $d011
+    .label SCREEN_CR_1 = $d011
+    .label SCREEN_CR_2 = $d016
     .label RASTER_LINE = $d012
     .label ISR = $d019
     .label COLOR_RAM = $d800
 
     .label SPRITE_ENABLE = $d015
-    .label XCOORDINATE = $d010
-
+    .label SPRITE_XCOORDINATE = $d010
+    
     .label SPRITE_0_PTR = SCREEN + $03f8
     .label SPRITE_0_X = $d000
     .label SPRITE_0_Y = $d001
