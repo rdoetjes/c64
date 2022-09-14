@@ -41,7 +41,7 @@ gameLogic:
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
-  //jsr checkCollision
+  jsr checkCollision
   rts
 
   // game start
