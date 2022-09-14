@@ -36,21 +36,26 @@ HardScroll:
   inx
   cpx #40 
   bne !-
-  lda SID.OSC3_RO
+  //lda SID.OSC3_RO
+  jsr rand
   and #15
-  adc #63
+  clc
+  adc #64
   sta VIC.SCREEN + (BACKGROUND.LINE * 40) + 39
-  lda SID.OSC3_RO
+  //lda SID.OSC3_RO
+  jsr rand
   and #15
-  adc #79
+  clc
+  adc #80
   sta VIC.SCREEN + ((BACKGROUND.LINE+1) * 40) + 39
   rts
 
   createLandscape:
   ldx #0
   !:
-    lda SID.OSC3_RO
+    jsr rand
     and #15
+    clc
     adc #64
     sta VIC.SCREEN + (BACKGROUND.LINE * 40), x
     lda #9
@@ -61,8 +66,9 @@ HardScroll:
     nop
     nop
     nop
-    lda SID.OSC3_RO
+    jsr rand
     and #15
+    clc
     adc #80
     sta VIC.SCREEN + ((BACKGROUND.LINE+1) * 40), x
     lda #9

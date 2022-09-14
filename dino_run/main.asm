@@ -23,3 +23,4 @@ main:
 #import "src/background.asm"
 #import "src/player.asm"
 #import "src/obstacle.asm"
+#import "src/lib/rand.asm"
