@@ -41,7 +41,7 @@ gameLogic:
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
-  jsr checkCollision
+  //jsr checkCollision
   rts
 
   // game start
@@ -91,6 +91,7 @@ increaseSpeed:
   rts
 
   !increaseSpeed:
+  clc
   lda scroll_speed_layer
   adc #$02
   sta scroll_speed_layer
