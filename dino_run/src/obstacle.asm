@@ -27,7 +27,7 @@ obstacleSprites:
   lda #$05     
   sta VIC.SPRITE_1_COLOR  //set sprite color to green
 
-  lda #$8e
+  lda #$8c
   sta VIC.SCREEN + $03f9   //load sprite offset
   lda VIC.SPRITE_ENABLE
   ora #2  
@@ -38,14 +38,14 @@ moveObstacles:
   lda VIC.SPRITE_1_X
   sec
   sbc scroll_speed_layer + 2
-  bcc !+
+  bcc !+  
   sta VIC.SPRITE_1_X
   rts
 !:
-  lda #%11111101
-  and VIC.SPRITE_XCOORDINATE
+  lda VIC.SPRITE_XCOORDINATE
+  eor #%00000010
   sta VIC.SPRITE_XCOORDINATE
-  lda #$ff
+  lda #$fe
   sta VIC.SPRITE_1_X
   rts
 

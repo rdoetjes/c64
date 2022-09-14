@@ -5,6 +5,7 @@
 PLAYER: {
   .label MAX_LEFT_POS = 40
   .label MAX_RIGHT_POS = 230
+  .label JUMP_HEIGHT = 22
 
   .label SPRITE_WALK_OFFSET = $80
   .label SPRITE_DUG_OFFSET = $84
@@ -80,7 +81,7 @@ jump_up:    // 4 sprite (0-3) jump cycle, we prevent reloading when we don't nee
   cmp dino_animation_state
   bne !++
   lda jump_height
-  cmp #25
+  cmp #PLAYER.JUMP_HEIGHT
   bcs !+
   inc jump_height
   dec VIC.SPRITE_0_Y
