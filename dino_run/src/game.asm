@@ -30,6 +30,7 @@ gameCycle:
   !:
   rts
 
+// all the none visible logic of the game goes here
 gameLogic:
   lda playerState
   cmp #STATE.GAMEOVER
@@ -57,6 +58,7 @@ gameLogic:
     jsr gameOver
     rts
 
+//Do not scroll the region of the score, this is a ratser interrupt
 noScroll:
   pushall()
   lda #$07
