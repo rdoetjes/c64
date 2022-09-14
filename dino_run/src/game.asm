@@ -60,6 +60,9 @@ gameOver:
     inx
     jmp !-
   !:
+  rts
+
+pressButtonStart:
   ldx #$00
   !:
     lda presStartString, x
@@ -76,7 +79,10 @@ checkCollision:
   and #$01
   bne !+
   rts
-!:  
+!:
+  lda #gameOverCountDown
+  sta gameOverFrameCountDown
+
   lda #STATE.GAMEOVER
   sta playerState
   rts
@@ -89,7 +95,7 @@ readInput:
   //player states are managed and handled in the player.asm code
   lda playerState
   cmp #STATE.START
-  beq !+     
+  beq !+   
   cmp #STATE.JUMP_UP
   beq !+               // when the player is jumping, then no input will be registered until the player is back down
   cmp #STATE.JUMP_DOWN
@@ -106,9 +112,22 @@ readInput:
   joystick2State($08, STATE.MOVE_RIGHT) // right go to state right
   rts
 
-  // when in game over state a button press goes to start state
+  !gameRestart:
+    lda #gameOverCountDown
+    sta gameOverFrameCountDown
+    lda #STATE.START
+    sta playerState
+    rts
+  // when in game over block joystick inpit for gameOvrerFraeCountDown frames
   !gameOver:
+    lda gameOverFrameCountDown
+    bne !gameOverCountDown+
+    jsr pressButtonStart
     joystick2State($10, STATE.START) // button go to state jump
+    rts
+    !gameOverCountDown:
+      dec gameOverFrameCountDown
+      rts
   !:
   rts
 
@@ -136,10 +155,3 @@ gameStart:
 game:
   jmp *
   rts
-
-gameOverString: 
-  .text "game over"
-  .byte $00
-presStartString: 
-  .text "button to start"
-  .byte $00
