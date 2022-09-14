@@ -268,12 +268,22 @@ drawScore:
 //that way we can start in game over state, and after a button press we can move to game state
 gameSetup:
   jsr cls
+  
+  lda #$07
+  jsr fillColor
+
   jsr setupSid4Noise
+  
   jsr setupCharset
+  
   jsr dinoSprite
+  
   jsr obstacleSprites
+  
   jsr createLandscape
+  
   jsr resetScore
+  
   jsr resetSpeed
   rts
 

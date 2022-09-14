@@ -18,6 +18,17 @@ cls:
   bne !-
   rts
 
+//Fill the color ram with this color provided in A
+fillColor:
+  ldx #250
+!:
+  sta VIC.COLOR_RAM, x
+  sta VIC.COLOR_RAM + 250, x
+  sta VIC.COLOR_RAM + 500, x
+  sta VIC.COLOR_RAM + 750, x
+  dex
+  bne !-
+  rts
 
 // initialize the game and setup a raster interrupt that counts the frame_counter variable, which we will poll in game loop
 // X contains the line to interrupt on
