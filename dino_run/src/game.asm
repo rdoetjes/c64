@@ -112,14 +112,16 @@ readInput:
   !:
   rts
 
-  gameStart:
-    jsr cls
-    jsr setupSid4Noise
-    jsr setupCharset
-    jsr dinoSprite
-    jsr obstacleSprites
-    jsr createLandscape
-    rts
+//sets up the whole game, but not the game state! That is done after calling this routine
+//that way we can start in game over state, and after a button press we can move to game state
+gameStart:
+  jsr cls
+  jsr setupSid4Noise
+  jsr setupCharset
+  jsr dinoSprite
+  jsr obstacleSprites
+  jsr createLandscape
+  rts
 
 // the game runs from a raster interrupt, hence we just loop here.
 //Perhaps we will create an exit state so we can return... NAAH probably not.
