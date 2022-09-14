@@ -43,7 +43,7 @@ setup:
   jsr screenColor
 
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
-  ldx #$0a
+  ldx #$ff
   lda #<gameIrq               
   sta $fffe
   lda #>gameIrq

@@ -4,6 +4,7 @@
 
 // raster interrupt 1 that counts the frames
 gameIrq:
+inc $d020
   pushall()
   inc frame_counter
   lda frame_counter
@@ -11,6 +12,14 @@ gameIrq:
   jsr gameCycle
   popall()
   asl $d019               // ack interrupt
+
+  ldx #90
+  lda #<noScroll
+  sta $fffe
+  lda #>noScroll
+  sta $ffff
+  jsr setupRasterInt
+dec $d020
   rti
 
 // draw the new state
@@ -47,6 +56,23 @@ gameLogic:
     jsr drawScore
     jsr gameOver
     rts
+
+noScroll:
+  pushall()
+  lda #$07
+  sta VIC.SCREEN_CR_2
+  popall()
+  asl $d019
+
+  // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
+  ldx #110
+  lda #<gameIrq
+  sta $fffe
+  lda #>gameIrq
+  sta $ffff
+  jsr setupRasterInt
+
+  rti
 
 // increase speed at 500, 1500, 2500
 increaseSpeed:
@@ -174,6 +200,7 @@ resetScore:
     bpl !-
   rts
 
+// reset the scroll position and the game speed before starting
 resetSpeed:
   lda #$02
   sta scroll_speed_layer
@@ -201,6 +228,7 @@ incScore:
   cld
   rts
 
+// translate the score from BCD and write on the screen
 drawScore:
   ldx #$00
   ldy #$00
