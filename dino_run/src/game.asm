@@ -64,7 +64,7 @@ noScroll:
   asl $d019
 
   // setup gameIrq which is basically the game loop trigger raster interrupt on line ff
-  ldx #110
+  ldx #130
   lda #<gameIrq
   sta $fffe
   lda #>gameIrq
@@ -287,7 +287,9 @@ gameSetup:
   jsr resetScore
   
   jsr resetSpeed
-  
+
+  jsr drawCloud
+
   rts
 
 // sets up the system for the game

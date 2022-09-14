@@ -24,3 +24,4 @@ main:
 #import "src/player.asm"
 #import "src/obstacle.asm"
 #import "src/lib/rand.asm"
+#import "src/cloud.asm"
