@@ -40,7 +40,6 @@ dinoSprite:
 //takes care of loading the right animation cycle and moving the player sprite
 movePlayerCharacter:  
   lda playerState
-  sta VIC.SCREEN + 1
 
   cmp #STATE.WALK             //state jump coming down 
   beq !walk+

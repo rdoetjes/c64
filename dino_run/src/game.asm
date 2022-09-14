@@ -6,8 +6,7 @@
 gameIrq:
   pushall()
   inc frame_counter
-  lda frame_counter
-  sta $0402
+
   jsr gameCycle
   popall()
   asl $d019               // ack interrupt
@@ -270,6 +269,8 @@ gameSetup:
   
   jsr setupCharset
 
+  jsr cls
+  
   lda #$07
   jsr fillColor
 

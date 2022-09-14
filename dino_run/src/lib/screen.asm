@@ -7,26 +7,28 @@
 //
 // Clobbers: A and X
 cls:
-  ldx #250
+  ldx #0
   lda #32
 !:
   sta VIC.SCREEN +   0, x
   sta VIC.SCREEN + 250, x
   sta VIC.SCREEN + 500, x
   sta VIC.SCREEN + 750, x
-  dex
+  inx
+  cpx #251
   bne !-
   rts
 
 //Fill the color ram with this color provided in A
 fillColor:
-  ldx #250
+  ldx #0
 !:
   sta VIC.COLOR_RAM +   0, x
   sta VIC.COLOR_RAM + 250, x
   sta VIC.COLOR_RAM + 500, x
   sta VIC.COLOR_RAM + 750, x
-  dex
+  inx
+  cpx #251
   bne !-
   rts
 
