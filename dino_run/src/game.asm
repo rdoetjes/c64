@@ -74,7 +74,7 @@ noScroll:
 
   rti
 
-// increase speed at 500, 1500, 2500
+// increase the speed to 4 pixel scroll on score 2000
 increaseSpeed:
   lda scroll_speed_layer
   cmp #$04
@@ -92,6 +92,7 @@ increaseSpeed:
   rts
 
   !increaseSpeed:
+  lda scroll_speed_layer
   adc #$02
   sta scroll_speed_layer
   !:
@@ -121,6 +122,7 @@ gameOver:
   !:
   rts
 
+// print the press the button to start text
 pressButtonStart:
   ldx #$00
   !:
