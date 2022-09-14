@@ -30,6 +30,7 @@ gameLogic:
 
   // game loop
   jsr incScore
+  jsr increaseSpeed
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
@@ -46,6 +47,27 @@ gameLogic:
     jsr drawScore
     jsr gameOver
     rts
+
+// increase speed at 500, 1500, 2500
+increaseSpeed:
+  lda score + 1
+  cmp #$05
+  beq !match+
+  rts
+  !match:
+  lda score + 2
+  cmp #$00
+  beq !increaseSpeed+
+  rts
+  !increaseSpeed:
+  inc $d020
+  lda scroll_speed_layer + 2
+  cmp #$06
+  beq !+
+  adc #$02
+  sta scroll_speed_layer + 2
+  !:
+  rts
 
 // draws background and sprite animation of player (dino)
 draw:
@@ -149,6 +171,16 @@ resetScore:
     dex
     bpl !-
   rts
+
+resetSpeed:
+  lda #$02
+  ldx #$02
+  !:
+  sta scroll_speed_layer, x
+  dex
+  bpl !-
+  rts 
+
 //scoring is done 1 point per frame
 incScore:
   sed
@@ -210,7 +242,9 @@ gameSetup:
   jsr obstacleSprites
   jsr createLandscape
   jsr resetScore
+  jsr resetSpeed
   rts
+
 // sets up the system for the game
 gameStart:
   jsr gameSetup

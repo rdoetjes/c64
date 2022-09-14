@@ -15,7 +15,7 @@ frame_counter:
   .byte $00
 
 scroll_speed_layer:
-  .byte $03, $03, $02
+  .byte $03, $03, $01
 
 scroll_position_layer:
   .byte $07, $07, $07
