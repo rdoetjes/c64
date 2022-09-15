@@ -279,7 +279,7 @@ gameSetup:
   jsr dinoSprite
   
   jsr obstacleSprites
-
+    
   jsr createLandscape
   
   jsr resetScore
