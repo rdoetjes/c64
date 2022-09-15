@@ -37,7 +37,7 @@ gameLogic:
 
   // game loop
   jsr incScore
-  //jsr increaseSpeed
+  jsr decreaseSpeed
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
@@ -73,9 +73,9 @@ noScroll:
   rti
 
 // increase the speed to 4 pixel scroll on score 2000
-increaseSpeed:
+decreaseSpeed:
   lda scroll_speed_layer
-  cmp #$04
+  cmp #$02
   beq !+
 
   lda score + 1
@@ -90,9 +90,9 @@ increaseSpeed:
   rts
 
   !increaseSpeed:
-  clc
+  sec
   lda scroll_speed_layer
-  adc #$02
+  sbc #$02
   sta scroll_speed_layer
   lda #$07
   sta scroll_position_layer
@@ -205,7 +205,7 @@ resetScore:
 
 // reset the scroll position and the game speed before starting
 resetSpeed:
-  lda #$02
+  lda #$04
   sta scroll_speed_layer
   lda #$07
   sta scroll_position_layer
