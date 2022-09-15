@@ -10,7 +10,7 @@ OBSTACLCE: {
 
 obstacleSprites:
   lda #$8e
-  sta VIC.SCREEN + $03f9   //load sprite offset
+  sta VIC.SPRITE_1_PTR   //load sprite offset
   lda VIC.SPRITE_ENABLE
   and #%11111101  
   sta VIC.SPRITE_ENABLE   // disable sprite 2
@@ -28,7 +28,7 @@ obstacleSprites:
   sta VIC.SPRITE_1_COLOR  //set sprite color to green
 
   lda #$8e
-  sta VIC.SCREEN + $03f9   //load sprite offset
+  sta VIC.SPRITE_1_PTR  //load sprite offset
   lda VIC.SPRITE_ENABLE
   ora #2  
   sta VIC.SPRITE_ENABLE   // enable sprite 2

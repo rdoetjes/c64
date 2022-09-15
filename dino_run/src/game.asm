@@ -142,11 +142,11 @@ checkCollision:
   bne !+
   rts
   !:
-  lda #gameOverCountDown
-  sta gameOverFrameCountDown
-
   lda #STATE.GAMEOVER
   sta playerState
+
+  lda #gameOverCountDown
+  sta gameOverFrameCountDown
   rts
 
 // read the joy stick and store it's value in zero page ff (saves 2 cycles for each position evaluation) 
@@ -275,8 +275,6 @@ gameSetup:
 
   lda #$07
   jsr fillColor
-
-  jsr setupSid4Noise
   
   jsr dinoSprite
   
