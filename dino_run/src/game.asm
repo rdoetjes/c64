@@ -37,7 +37,7 @@ gameLogic:
 
   // game loop
   jsr incScore
-  jsr increaseSpeed
+  //jsr increaseSpeed
   jsr movePlayerCharacter   //move character based on joystick input
   jsr moveObstacles
   jsr scrollBgLogic
