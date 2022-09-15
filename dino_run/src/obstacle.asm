@@ -33,8 +33,8 @@ obstacleSprites:
   ora #2  
   sta VIC.SPRITE_ENABLE   // enable sprite 2
 
-  lda SPRITE_COLLISION_1
-  lda SPRITE_COLLISION_2
+  lda VIC.SPRITE_COLLISION_1
+  lda VIC.SPRITE_COLLISION_2
   rts
 
 moveObstacles:
