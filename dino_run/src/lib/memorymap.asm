@@ -22,7 +22,8 @@ VIC: {
     .label SPRITE_1_Y = $d003
     .label SPRITE_1_COLOR = $d028
 
-    .label SPRITE_COLLISION = $d01e 
+    .label SPRITE_COLLISION_1 = $d01e 
+    .label SPRITE_COLLISION_2 = $d01f
 }
 
 IO: {

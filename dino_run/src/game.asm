@@ -137,7 +137,7 @@ pressButtonStart:
 
 // simple sprite collision, which works since both player and obstacles are sprites
 checkCollision:
-  lda VIC.SPRITE_COLLISION
+  lda VIC.SPRITE_COLLISION_1
   and #$01
   bne !+
   rts
