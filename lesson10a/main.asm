@@ -54,18 +54,22 @@ irq1:
   cmp $d012 // compare what is in a with what the current raster line is, as long as it's the same jmp back to cmp statement
   beq *-3
 
+  // set the border and background to green
   lda #$05
   sta $d020
   sta $d021
 
+  // wait until the current rasterline is drawn
   lda $d012 // load the current raster line in a
   cmp $d012 // compare what is in a with what the current raster line is, as long as it's the same jmp back to cmp statement
-  beq *-3
+  beq *-3   // jump back 3 bytes to the cmp
 
+  //set the border and background back to black
   lda #$00
   sta $d020
   sta $d021
 
+  inc $040a
   asl $d019 //ack current interrupt so the next one can be triggered
 
   // the OS has pushed all registers so we need to pop them (when you run without OS you should push and pop them)
