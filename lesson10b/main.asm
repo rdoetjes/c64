@@ -3,6 +3,34 @@
 .const OFFSET = $190        //offset for where we want to begin writing the string
 .var music = LoadSid("80s_Ad.sid")
 
+.macro setup_raster_irq(irq_handler, line){
+  sei
+  lda #<irq_handler
+  sta $0314
+  lda #>irq_handler
+  sta $0315
+
+  // switch off interupts from CIAs
+  lda #$7f
+  sta $dc0d
+
+  // clear most significant bit of VIC's raster register
+  and $D011            
+  sta $D011
+
+  // enable raster interrups 
+  lda #1
+  sta $d01a
+
+  // trigger the raster interrupt on line 00
+  lda #line
+  sta $d012
+
+  asl $d019                   // accept current interrupt
+  cli
+  rts
+}
+
 BasicUpstart2(main)
 
 main:
@@ -160,34 +188,6 @@ setup:
   setup_raster_irq(irq1, $00)      // call macro to setup irq handler
 
   rts
-
-.macro setup_raster_irq(irq_handler, line){
-  sei
-  lda #<irq_handler
-  sta $0314
-  lda #>irq_handler
-  sta $0315
-
-  // switch off interupts from CIAs
-  lda #$7f
-  sta $dc0d
-
-  // clear most significant bit of VIC's raster register
-  and $D011            
-  sta $D011
-
-  // enable raster interrups 
-  lda #1
-  sta $d01a
-
-  // trigger the raster interrupt on line 00
-  lda #line
-  sta $d012
-
-  asl $d019                   // accept current interrupt
-  cli
-  rts
-}
 
 irq1:
  inc event_handle
