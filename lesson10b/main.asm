@@ -4,27 +4,31 @@
 .var music = LoadSid("80s_Ad.sid")
 
 .macro setup_raster_irq(irq_handler, line){
-  sei
+  sei                           //disable interrupts during setup
 
-  lda #<irq_handler
-  sta $0314     //$fffe
-  lda #>irq_handler
-  sta $0315     //$ffff
+  lda #<irq_handler             //load low byte of interrupt handler routine
+  sta $0314                     //store low byte in $0314 the address where raster interrupt vector is stored, $fffe when you bank out kernal and basic
+  lda #>irq_handler             //load high byte of interrupt handler routine
+  sta $0315                     //store low byte in $0315 the address where raster interrupt vector is stored, $ffff when you bank out kernal and basic
 
+  //disable CIA interrupts
   lda #$7f
   sta $dc0d
 
-  // ack cia interrupts
+  // ack CIA interrupts
   lda $dc0d
   lda $dd0d
 
+  // enable only the raster interrupt (disable sprite collisions, if you want to keep sprite collisions user an OR with value #1)
   lda #$7f
   and $d011
   sta $d011
 
+  // enable raster interrupts
   lda #$01
   sta $d01a
 
+  // the line where you want the interrupt to happen
   lda #line
   sta $d012
 
