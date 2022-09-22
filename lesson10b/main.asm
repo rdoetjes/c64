@@ -1,6 +1,8 @@
 #import "memorymap.asm"     //include some of the the constants aka lables for VIC and SID so we don't need to do that manually every time.
 
 .const OFFSET = $190        //offset for where we want to begin writing the string
+
+//Load sid tune
 .var music = LoadSid("80s_Ad.sid")
 
 .macro setup_raster_irq(irq_handler, line){
@@ -182,17 +184,21 @@ setup:
 
   jsr clearScreen
 
-  lda #music.startSong-1              //init the SID tune
   ldx #0
   ldy #0
-  jsr music.init              //init the SID tune
+  lda #music.startSong-1              //init the SID tune (why do they do this??? Works without)
+  jsr music.init                      //init the SID tune
   
-  setup_raster_irq(irq1, $00)      // call macro to setup irq handler
+  setup_raster_irq(irq1, $00)         // call macro to setup irq handler
 
   rts
 
 irq1:
- inc event_handle
+ inc event_handle         // we set a flag and the main routine will monitor this flag and process async
+                          // Now usually with games and demos you can run all the code in the irq handler
+                          // but for interrupts where you need to process data, you want to collect the data
+                          // store it in a buffer and async process that data
+                          // hence this little example
 !:
   asl $d019               // most efficient way to acknowledge the interrupt, so we can receive new raster interrupts
   //reload all registers as the were pushed by the irq
@@ -257,8 +263,9 @@ gradientOffset:
 gradientColor:
   .byte $07, $07, $0f, $0a, $0c, $04, $0b, $06, $06, $04, $0c, $0a, $0f, $0b
 
+//Load the SID tune
 *=music.location "Music"    //for this sid tune it's $1000
-  .fill music.size, music.getData(i)
+  .fill music.size, music.getData(i)    //get the sid tune data and store it in memory on the right location
 
 *=$2000                     //load charset in $2000
 #import "charset_1.asm"     // load the charset_1.asm into this project, this charset is created using https://petscii.krissz.hu/ editor. Then exported to assembly and made to work with kickassembler
