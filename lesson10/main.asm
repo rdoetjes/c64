@@ -157,15 +157,15 @@ setup:
   ldy #0
   jsr music.init              //init the SID tune
   
-  jsr setup_raster_irq        //setup raster irq
-  
+  setup_raster_irq(irq1, $00)      // call macro to setup irq handler
+
   rts
 
-setup_raster_irq:
-sei
-  lda #<irq1
+.macro setup_raster_irq(irq_handler, line){
+  sei
+  lda #<irq_handler
   sta $0314
-  lda #>irq1
+  lda #>irq_handler
   sta $0315
 
   // switch off interupts from CIAs
@@ -181,12 +181,13 @@ sei
   sta $d01a
 
   // trigger the raster interrupt on line 00
-  lda #00
+  lda #line
   sta $d012
 
   asl $d019                   // accept current interrupt
   cli
   rts
+}
 
 irq1:
  inc event_handle
