@@ -157,7 +157,12 @@ setup:
   ldy #0
   jsr music.init              //init the SID tune
   
-  sei
+  jsr setup_raster_irq        //setup raster irq
+  
+  rts
+
+setup_raster_irq:
+sei
   lda #<irq1
   sta $0314
   lda #>irq1
@@ -181,7 +186,7 @@ setup:
 
   asl $d019                   // accept current interrupt
   cli
-rts
+  rts
 
 irq1:
  inc event_handle
