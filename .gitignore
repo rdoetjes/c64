@@ -2,4 +2,4 @@
 *.sym
 buildlog.txt
 bin/*
-
+.DS_*
