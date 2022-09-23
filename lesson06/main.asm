@@ -65,7 +65,7 @@ fillColors:
 // globbers X and A
 getNextColor:
   ldx colorOffset         // load the offset into the gradientColor 
-  cpx #14                 // when the offset is 13 we are at the end of the array and we need to reset it, to prevent reading outside of the array
+  cpx #14                 // when the offset is 14 we are at the end of the array and we need to reset it, to prevent reading outside of the array
   beq !+
   jmp !++
 !:

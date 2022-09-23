@@ -26,7 +26,7 @@ rts
 // clobbers, A, X and Y
 colorCycle:
   ldx VIC.COLOR_RAM + OFFSET
-  ldy #1
+  ldy #0
 !:
   lda VIC.COLOR_RAM + OFFSET + 1, y
   sta VIC.COLOR_RAM + OFFSET + 40 , y
