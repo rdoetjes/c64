@@ -13,16 +13,6 @@ everyFrame:
     jsr fineScroll
     jsr colorCycle          // slide the colorgradient to the left
     
-    ldx hard_scroll
-    bne scrollTextWholeStep
-    jmp everyFrame
-
-scrollTextWholeStep:
-    dec hard_scroll
-    jsr scroller            // write text over and over again, as later on we will make this scroll and now it will slow down the pulsing off the colors nicely    
-    lda VIC.XSCROLL
-    ora #7
-    sta VIC.XSCROLL
     jmp everyFrame
 
 frameWait:
@@ -41,14 +31,14 @@ fineScroll:
   beq !+
   jmp !++
 !:
-  inc hard_scroll           // set flag to do a whole byte hard scroll
+  jsr scroller           // set flag to do a whole byte hard scroll
   // reset the bottom 3 bits to high again so we can count back without harming the upper bit
   lda VIC.XSCROLL           
   ora #7
   sta VIC.XSCROLL
 !:
   rts
-
+  
 insertCharAtBack:
   ldx textOffset
   lda text1, x
