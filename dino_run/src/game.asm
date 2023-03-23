@@ -180,7 +180,7 @@ readInput:
     lda #STATE.START
     sta playerState
     rts
-  // when in game over block joystick inpit for gameOvrerFraeCountDown frames
+  // when in game over state, block joystick input for gameOverFrameCountDown frames
   !gameOver:
     lda gameOverFrameCountDown
     bne !gameOverCountDown+
