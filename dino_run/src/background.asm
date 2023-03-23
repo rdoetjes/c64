@@ -1,5 +1,4 @@
 #importonce
-
 #import "lib/memorymap.asm"
 
 BACKGROUND: {
@@ -17,6 +16,10 @@ scrollBgLogic:
   rts
 
 scrollBackground:
+  lda playerState
+  cmp #STATE.GAMEOVER
+  beq !return+
+
   lda scroll_position_layer
   cmp #$07
   bne !+
@@ -24,6 +27,8 @@ scrollBackground:
   lda #$07
   !:
   sta VIC.SCREEN_CR_2
+
+  !return:
   rts
 
 HardScroll:
