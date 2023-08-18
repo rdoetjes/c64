@@ -10,10 +10,6 @@ main:
     sta $07f8           //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
     sta $07f9           //give sprite_1 the same sprite pointer, so we have two balls
 
-    //enable sprite_0 and sprite_1 (this is a bit mask each bit corresponds to of of the 8 sprites)
-    lda #$03
-    sta $d015
-
     //set color sprite_0 to green sprite_1 to red
     lda #$05
     sta $d027
@@ -30,20 +26,25 @@ main:
     sta $d002
     sta $d003
 
+    //enable sprite_0 and sprite_1 (this is a bit mask each bit corresponds to of of the 8 sprites)
+    lda #$03
+    sta $d015
+
 loop:
+move_sprite_0:
     clc            // clear carry because we will be using adc and want to see carry change
     lda $d000      // load the current sprite_0 x position
     adc #$01       // by using adc we actually can check the carry flag
     sta $d000      // store the position to the sprite_0 x pos
     bcs toggle_x_high_bit_sprite_0    // when carry is set we wet over x position 255 so we need to toggle the high bit
-    jmp sprite_1   // is carry not is set we don't need to toggel high bit 
+    jmp move_sprite_1   // is carry not is set we don't need to toggel high bit 
     
 toggle_x_high_bit_sprite_0:    
     lda $d010       // load the high byte of sprite location
     eor #%00000001  // toggle bit 1, so we are going over 255
     sta $d010       // store it back
 
-sprite_1:
+move_sprite_1:
     sec             // set the carry since we are going to the sbc, and we want to see it reset when we go "lower than 0"
     lda $d003       // load current y_pos sprite 1
     sbc #$02        // subtract 2 positions (makes it faster than sprite_0)

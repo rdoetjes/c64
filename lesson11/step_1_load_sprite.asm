@@ -9,14 +9,14 @@ main:
     lda #$80
     sta $07f8					//this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
 
-    //enable sprite 0
-    lda #$01
-    sta $d015
-
     //set x and y position to $80
     lda #$80
     sta $d000
     sta $d001
+
+    //enable sprite 0
+    lda #$01
+    sta $d015
 
 loop:
     jmp loop

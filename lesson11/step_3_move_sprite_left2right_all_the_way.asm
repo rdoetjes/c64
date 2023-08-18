@@ -7,16 +7,16 @@ main:
   	//in this case, the address is $2000
     //$80 * $40 = $2000
     lda #$80
-    sta $07f8           //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
-
-    //enable sprite 0 (this is a bit mask each bit corresponds to of of the 8 sprites)
-    lda #$01
-    sta $d015
+    sta $07f8        //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
 
     //set x and y position to $80
     lda #$80
     sta $d000       // pos_x sprite_0
     sta $d001       // pos_y sprite_0
+
+    //enable sprite 0 (this is a bit mask each bit corresponds to of of the 8 sprites)
+    lda #$01
+    sta $d015
 
 loop:
     clc             // clear the carry, since we will use adc and we want to see when we went over 255, so we can toggle high bit
