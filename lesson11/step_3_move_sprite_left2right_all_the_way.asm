@@ -9,7 +9,7 @@ main:
     lda #$80
     sta $07f8
 
-    //enable sprite 0
+    //enable sprite 0 (this is a bit mask each bit corresponds to of of the 8 sprites)
     lda #$01
     sta $d015
 
@@ -26,6 +26,7 @@ loop:
     sta $d000
     jmp wait_line
 toggle_x_high_bit:    
+    inc $D027       // increment sprite_0's color
     lda $d010       // load the high byte of sprite location
     eor #%00000001  // toggle bit 1, so we are going over 255
     sta $d010       // store it back
