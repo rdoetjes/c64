@@ -22,17 +22,18 @@ loop:
     clc
     lda $d000
     adc #$01       // by using adc we actually can check the carry flag
-    bcs toggle_x_high_bit
-    sta $d000
+    bcs toggle_x_high_bit_sprite_1
     jmp wait_line
-toggle_x_high_bit:    
-    inc $d027       // increment sprite_0's color
+    
+toggle_x_high_bit_sprite_1:    
+    inc $d027       // increment sprite_0's color for demonstration purpose
     lda $d010       // load the high byte of sprite location
     eor #%00000001  // toggle bit 1, so we are going over 255
     sta $d010       // store it back
-    sta $d000       // store it back
 
-wait_line:
+wait_line:        
+    sta $d000       // store the position to the sprite_0 x pos
+
     //quick and dirty for demo
     //let's wait for screen line in the polling way (check lesson 10 for line interrupts)
     lda #255
