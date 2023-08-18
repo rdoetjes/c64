@@ -46,7 +46,7 @@ getGradientColor:
   jmp !++
 !:
   ldx #$00
-  sta gradientOffset
+  stx gradientOffset
 !:
   lda gradientColor, x
   inx
