@@ -7,9 +7,8 @@ main:
   	//in this case, the address is $2000
     //$80 * $40 = $2000
     lda #$80
-    sta $07f8
-    // give sprite_1 the same sprite pointer, so we have two balls
-    sta $07F9
+    sta $07f8           //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
+    sta $07f9           //give sprite_1 the same sprite pointer, so we have two balls
 
     //enable sprite_0 and sprite_1 (this is a bit mask each bit corresponds to of of the 8 sprites)
     lda #$03
@@ -32,35 +31,35 @@ main:
     sta $d003
 
 loop:
-    clc
-    lda $d000
+    clc            // clear carry because we will be using adc and want to see carry change
+    lda $d000      // load the current sprite_0 x position
     adc #$01       // by using adc we actually can check the carry flag
-    sta $d000       // store the position to the sprite_0 x pos
-    bcs toggle_x_high_bit_sprite_1    
-    jmp sprite_1
+    sta $d000      // store the position to the sprite_0 x pos
+    bcs toggle_x_high_bit_sprite_0    // when carry is set we wet over x position 255 so we need to toggle the high bit
+    jmp sprite_1   // is carry not is set we don't need to toggel high bit 
     
-toggle_x_high_bit_sprite_1:    
+toggle_x_high_bit_sprite_0:    
     lda $d010       // load the high byte of sprite location
     eor #%00000001  // toggle bit 1, so we are going over 255
     sta $d010       // store it back
 
 sprite_1:
-    sec
-    lda $d003
-    sbc #$02       // by using adc we actually can check the carry flag
-    sta $d003       // store the position to the sprite_0 x pos
-    bcc toggle_x_high_bit_sprite_2
+    sec             // set the carry since we are going to the sbc, and we want to see it reset when we go "lower than 0"
+    lda $d003       // load current y_pos sprite 1
+    sbc #$02        // subtract 2 positions (makes it faster than sprite_0)
+    sta $d003       // store the position to the sprite_1 y pos
+    bcc toggle_x_high_bit_sprite_1  // when carry is cleared we crossed the y_pos 0 and we need to toggle high bit for sprite_1
     jmp wait_line
 
-toggle_x_high_bit_sprite_2:    
+toggle_x_high_bit_sprite_1:    
     lda $d010       // load the high byte of sprite location
     eor #%00000010  // toggle bit 1, so we are going over 255
-    sta $d010   
+    sta $d010       // store back the updated high bit
 
 wait_line: 
     // poll for sprite collision
     lda $d01e
-    bne increase_sprite_0_color
+    bne increase_sprite_colors
 
     //quick and dirty for demo
     //let's wait for screen line in the polling way (check lesson 10 for line interrupts)
@@ -69,8 +68,9 @@ wait_line:
     bne *-3
     jmp loop
 
-increase_sprite_0_color:
-    inc $d027
+increase_sprite_colors:
+    inc $d027       // increment color sprite_0
+    inc $d028       // increment color sprite_1
 
     jmp loop
 

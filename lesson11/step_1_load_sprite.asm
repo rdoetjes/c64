@@ -7,7 +7,7 @@ main:
   	//in this case, the address is $2000
     //$80 * $40 = $2000
     lda #$80
-    sta $07f8
+    sta $07f8					//this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
 
     //enable sprite 0
     lda #$01

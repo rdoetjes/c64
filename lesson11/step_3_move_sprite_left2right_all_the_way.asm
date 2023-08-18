@@ -7,7 +7,7 @@ main:
   	//in this case, the address is $2000
     //$80 * $40 = $2000
     lda #$80
-    sta $07f8
+    sta $07f8           //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
 
     //enable sprite 0 (this is a bit mask each bit corresponds to of of the 8 sprites)
     lda #$01
@@ -15,15 +15,15 @@ main:
 
     //set x and y position to $80
     lda #$80
-    sta $d000
-    sta $d001
+    sta $d000       // pos_x sprite_0
+    sta $d001       // pos_y sprite_0
 
 loop:
-    clc
-    lda $d000
-    adc #$01       // by using adc we actually can check the carry flag
-    bcs toggle_x_high_bit_sprite_1
-    jmp wait_line
+    clc             // clear the carry, since we will use adc and we want to see when we went over 255, so we can toggle high bit
+    lda $d000       // load x_pos sprite_0
+    adc #$01        // add to x_pos and this will affect the carry, which we are interested in
+    bcs toggle_x_high_bit_sprite_1  // carry is set so we need to toggle the sprite position's high bit
+    jmp wait_line   // just wait for the next frame with sprite updates
     
 toggle_x_high_bit_sprite_1:    
     inc $d027       // increment sprite_0's color for demonstration purpose
