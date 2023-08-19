@@ -53,6 +53,10 @@ move_sprite_1:
     jmp wait_line
 
 // you don't need this for y tough, because when you wrap from 0 to 255 you'll still be in an invisible area
+// I changed the lesson plan during filming initially I intended to move the red ball to the left on position y pos 80
+// then you need to toggle the bit and knowing the sec and sbc is usefull for that. Hence I simply forgot the impact of that
+// on the fly adlib to move the sprite up -- forgetting briefly that 255 is already in the vertical blank
+// for an optimized version see optimied-step4.asm
 toggle_x_high_bit_sprite_1:    
     lda $d010       // load the high byte of sprite location
     eor #%00000010  // toggle bit 1, so we are going over 255
