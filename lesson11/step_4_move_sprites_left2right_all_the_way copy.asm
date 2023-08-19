@@ -3,8 +3,8 @@
 
 main:
     //set sprite pointer index
-   	//this, multiplied by $40, is the address
-  	//in this case, the address is $2000
+    //this, multiplied by $40, is the address
+    //in this case, the address is $2000
     //$80 * $40 = $2000
     lda #$80
     sta $07f8           //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
@@ -49,9 +49,10 @@ move_sprite_1:
     lda $d003       // load current y_pos sprite 1
     sbc #$02        // subtract 2 positions (makes it faster than sprite_0)
     sta $d003       // store the position to the sprite_1 y pos
-    bcc toggle_x_high_bit_sprite_1  // when carry is cleared we crossed the y_pos 0 and we need to toggle high bit for sprite_1
+    bcc toggle_x_high_bit_sprite_1  // when carry is cleared we crossed the y_pos 0, which is not required as 255 is invisible area
     jmp wait_line
 
+// you don't need this for y tough, because when you wrap from 0 to 255 you'll still be in an invisible area
 toggle_x_high_bit_sprite_1:    
     lda $d010       // load the high byte of sprite location
     eor #%00000010  // toggle bit 1, so we are going over 255
