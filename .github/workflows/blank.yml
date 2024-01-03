@@ -39,7 +39,8 @@ jobs:
           set -e
 
           echo "Download KickAssembler"
-          curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          unzip -o KickAssembler.zip 
+          curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          
+          unzip -o KickAssembler.zip 
           
           echo "create artefact dir"
           mkdir ${{ runner.workspace }}/s/c64
