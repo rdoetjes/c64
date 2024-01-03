@@ -44,7 +44,7 @@ jobs:
 
           for d in $GITHUB_WORKSPACE/*/; do
             echo $d
-            prg=$(echo "$d"|sed -s 's/\///g')        
+            prg=$(basename "$d")        
             echo $prg
             if [ -f $d/main.asm ]; then
               echo "Building $prg"
