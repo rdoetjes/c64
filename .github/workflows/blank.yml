@@ -47,6 +47,6 @@ jobs:
             echo $d -> $prg
             if [ -f $d/main.asm ]; then
               echo "Building $prg"
-              java -jar ${{ runner.workspace }}/KickAss.jar $GITHUB_WORKSPACE/s/$d/main.asm -odir $GITHUB_WORKSPACE/s/$d/build -o $GITHUB_WORKSPACE/s/$d/build/$prg.prg
+              java -jar ./KickAss.jar $GITHUB_WORKSPACE/s/$d/main.asm -odir $GITHUB_WORKSPACE/s/$d/build -o $GITHUB_WORKSPACE/s/$d/build/$prg.prg
             fi
           done
