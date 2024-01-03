@@ -40,10 +40,9 @@ jobs:
 
             if [ -f ${{ runner.workspace }}/s/$d/main.asm ]; then
               echo "Building $prg"
-              java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
+              java -jar ${{ runner.workspace }}/KickAss.jar ${{ runner.workspace }}/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
             
               echo "Copying $prg"
-              cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
+              cp $(Pipeline.Workspace)/s/$d/build/$prg.prg ${{ runner.workspace }}/s/c64
             fi
           done
-        displayName: 'Assemble Code'
