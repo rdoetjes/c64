@@ -29,7 +29,8 @@ jobs:
         uses: actions/setup-java@v4.0.0
         with:
           # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
-          java-version: 21.0.1
+          java-version: 21
+          distribution: 'oracle'
           java-package: jre
          
       # Runs a set of commands using the runners shell
