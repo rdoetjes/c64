@@ -43,10 +43,11 @@ jobs:
           unzip -o KickAssembler.zip 
 
           for d in $GITHUB_WORKSPACE/*/; do
-            prg=$(echo "$d"|sed -s 's/\///g')
-            echo $d -> $prg
+            echo $d
+            prg=$(echo "$d"|sed -s 's/\///g')        
+            echo $prg
             if [ -f $d/main.asm ]; then
               echo "Building $prg"
-              java -jar ./KickAss.jar $GITHUB_WORKSPACE/s/$d/main.asm -odir $GITHUB_WORKSPACE/s/$d/build -o $GITHUB_WORKSPACE/s/$d/build/$prg.prg
+              java -jar ./KickAss.jar $d/main.asm -odir $d/build -o $d/build/$prg.prg
             fi
           done
