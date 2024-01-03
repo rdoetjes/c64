@@ -31,4 +31,19 @@ jobs:
           set -e
           wget http://theweb.dk/KickAssembler/KickAssembler.zip
           curl -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip
-          
+
+          echo "create artefact dir"
+          mkdir ${{ runner.workspace }}/s/c64
+
+          for d in */; do
+            prg=$(echo "$d"|sed -s 's/\///g')
+
+            if [ -f ${{ runner.workspace }}/s/$d/main.asm ]; then
+              echo "Building $prg"
+              java -jar /usr/local/bin/KickAss.jar $(Pipeline.Workspace)/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
+            
+              echo "Copying $prg"
+              cp $(Pipeline.Workspace)/s/$d/build/$prg.prg $(Pipeline.Workspace)/s/c64
+            fi
+          done
+        displayName: 'Assemble Code'
