@@ -42,7 +42,7 @@ jobs:
           curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          
           unzip -o KickAssembler.zip 
 
-          for d in */; do
+          for d in $GITHUB_WORKSPACE/*/; do
             prg=$(echo "$d"|sed -s 's/\///g')
 
             if [ -f $GITHUB_WORKSPACE/s/$d/main.asm ]; then
