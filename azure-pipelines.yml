@@ -12,7 +12,7 @@
 #     -variable ftphost containing the UltimateII ip address or hostname
 
 trigger:
-  - main
+  - none
 
 variables:
   - group: c64  #variable group containing the ftp related variables and values
