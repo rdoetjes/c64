@@ -56,8 +56,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           # Name of the artifact to upload.
-          # Optional. Default is 'artifact'
+          # Optional. Default is 'artifact' /home/runner/work/c64/c64
           name: c64_lessons
-          path: $GITHUB_WORKSPACE/c64/build/*
+          path: $GITHUB_WORKSPACE/build/
           if-no-files-found: error
           retention-days: 1
