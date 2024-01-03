@@ -30,17 +30,16 @@ jobs:
         with:
           # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
           java-version: 21
-          distribution: 'oracle'
+          distribution: 'zulu'
           java-package: jdk
          
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
           set -e
-          
-          wget http://theweb.dk/KickAssembler/KickAssembler.zip
-          curl -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip
-          unzip -o KickAssembler.zip 
+
+          echo "Download KickAssembler"
+          curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          unzip -o KickAssembler.zip 
           
           echo "create artefact dir"
           mkdir ${{ runner.workspace }}/s/c64
