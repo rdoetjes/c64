@@ -49,7 +49,7 @@ jobs:
             echo $prg
             if [ -f $d/main.asm ]; then
               echo "Building $prg"
-              java -jar ./KickAss.jar $d/main.asm -odir $GITHUB_WORKSPACE/build -o $GITHUB_WORKSPACE/build/$prg.prg
+              java -jar ./KickAss.jar $d/main.asm -odir ${{runner.workspace}}/build -o ${{runner.workspace}}/build/$prg.prg
             fi
           done
 
@@ -58,6 +58,6 @@ jobs:
           # Name of the artifact to upload.
           # Optional. Default is 'artifact' /home/runner/work/c64/c64
           name: c64_lessons
-          path: $GITHUB_WORKSPACE/build/
+          path: ${{ runner.workspace}}/build/*
           if-no-files-found: error
           retention-days: 1
