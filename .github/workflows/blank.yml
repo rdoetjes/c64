@@ -41,18 +41,12 @@ jobs:
           echo "Download KickAssembler"
           curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          
           unzip -o KickAssembler.zip 
-          
-          echo "create artefact dir"
-          mkdir ${{ runner.workspace }}/s/c64
 
           for d in */; do
             prg=$(echo "$d"|sed -s 's/\///g')
 
-            if [ -f ${{ runner.workspace }}/s/$d/main.asm ]; then
+            if [ -f $GITHUB_WORKSPACE/s/$d/main.asm ]; then
               echo "Building $prg"
-              java -jar ${{ runner.workspace }}/KickAss.jar ${{ runner.workspace }}/s/$d/main.asm -odir $(Pipeline.Workspace)/s/$d/build -o $(Pipeline.Workspace)/s/$d/build/$prg.prg
-            
-              echo "Copying $prg"
-              cp $(Pipeline.Workspace)/s/$d/build/$prg.prg ${{ runner.workspace }}/s/c64
+              java -jar ${{ runner.workspace }}/KickAss.jar $GITHUB_WORKSPACE/s/$d/main.asm -odir $GITHUB_WORKSPACE/s/$d/build -o $GITHUB_WORKSPACE/s/$d/build/$prg.prg
             fi
           done
