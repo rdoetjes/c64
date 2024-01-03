@@ -57,6 +57,6 @@ jobs:
           # Name of the artifact to upload.
           # Optional. Default is 'artifact'
           name: c64_lessons
-          path: $GITHUB_WORKSPACE/build/*.prg
+          path: $GITHUB_WORKSPACE/build/*
           if-no-files-found: error
           retention-days: 1
