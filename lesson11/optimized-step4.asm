@@ -5,7 +5,7 @@ main:
     //set sprite pointer index
    	//this, multiplied by $40, is the address
   	//in this case, the address is $2000
-    //$80 * $40 = $2000 ...
+    //$80 * $40 = $2000
     lda #$80
     sta $07f8           //this is screen ram + 1016 default screen ram is at 1024+1016 = 2040
     sta $07f9           //give sprite_1 the same sprite pointer, so we have two balls
