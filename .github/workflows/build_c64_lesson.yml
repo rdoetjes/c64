@@ -38,11 +38,10 @@ jobs:
           set -e
           echo $GITHUB_WORKSPACE
           if [ ! -f KickAss.jar ]; then
-          do
             echo "Download KickAssembler"
             curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          
             unzip -o KickAssembler.zip
-          done
+          fi
           
       # Runs a set of commands using the runners shell
       - name: Build main.asm in all dirs
