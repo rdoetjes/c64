@@ -36,11 +36,13 @@ jobs:
       - name: Install KickAss
         run: |
           set -e
-          echo $GITHUB_WORKSPACE
+          echo "Workspace: $GITHUB_WORKSPACE"
           if [ ! -f "$GITHUB_WORKSPACE/KickAss.jar" ]; then
             echo "Download KickAssembler"
-            curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0" -X GET http://theweb.dk/KickAssembler/KickAssembler.zip --output KickAssembler.zip          
-            unzip -o KickAssembler.zip
+            curl -L -o KickAssembler.zip "http://theweb.dk/KickAssembler/KickAssembler.zip"
+            unzip -o KickAssembler.zip -d "$GITHUB_WORKSPACE"
+          else
+            echo "KickAss.jar already exists, skipping download."
           fi
           
       # Runs a set of commands using the runners shell
