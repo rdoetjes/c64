@@ -37,7 +37,7 @@ jobs:
         run: |
           set -e
           echo "Workspace: $GITHUB_WORKSPACE"
-          if [ ! -f "$GITHUB_WORKSPACE/KickAss.jar" ]; then
+          if [ ! -f "KickAss.jar" ]; then
             echo "Download KickAssembler"
             curl -L -o KickAssembler.zip "http://theweb.dk/KickAssembler/KickAssembler.zip"
             unzip -o KickAssembler.zip -d "$GITHUB_WORKSPACE"
